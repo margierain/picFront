@@ -4,6 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { FbComponent } from './fb/fb.component';
+import { PicComponent } from './pic/pic.component';
+import { routing, appRouterProviders } from './app.route';
+import { FbService } from './fb/fb.service';
 
 @NgModule({
   declarations: [
@@ -12,7 +16,8 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    routing,
   ],
   providers: [],
   bootstrap: [AppComponent]

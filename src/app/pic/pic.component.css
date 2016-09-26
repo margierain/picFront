@@ -1,0 +1,34 @@
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#img-editors {
+  margin-top: 100px;
+}
+
+#nav  {
+    clear: both;
+    align-items: center;
+    position: fixed;
+    left:0px;
+    height:60px;
+    min-width: 100%;
+}
+
+footer {
+    clear: both;
+    align-items: center;
+    position: fixed;
+     left:0px;
+     bottom:0px;
+     min-width: 100%;
+}
+footer.page-footer {
+  padding-top: 0px !important;
+}
+
+#footer h6{
+    padding-left: 45vh;
+}
+
