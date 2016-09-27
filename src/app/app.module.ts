@@ -7,7 +7,8 @@ import { AppComponent } from './app.component';
 import { FbComponent } from './fb/fb.component';
 import { PicComponent } from './pic/pic.component';
 import { routing, appRouterProviders } from './app.route';
-import { FbService } from './fb/fb.service';
+
+
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { FbService } from './fb/fb.service';
     BrowserModule,
     FormsModule,
     HttpModule,
-    routing,
+    routing
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,7 +1,7 @@
-export class fb {
-  constructor(
-    public  Access_token : any,
-    public code: any,
+// export class fb {
+//   constructor(
+//     public  Access_token : any,
+//     public code: any,
 
-  ) { }
-}
+//   ) { }
+// }

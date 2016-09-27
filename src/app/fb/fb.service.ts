@@ -1,16 +1,46 @@
-import { Injectable } from '@angular/core';
-import { Http, Headers, HTTP_PROVIDERS } from '@angular/http';
-import {Observable} from 'rxjs/Rx';
-// import {  } from './fblogin';
-import 'rxjs/Rx';
-import 'rxjs/add/operator/map';
-@Injectable()
-export class FbService {
+/// <reference path="../../../fbsdk.d.ts" />
+export class FBConnector {
 
-  constructor() {
+    constructor(appID:string) {
+        //
+    if (!window.fbAsyncInit) {
+      //
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: appID,
+          xfbml: true,
+          version: 'v2.5'
+        });
+        console.log('gb')
+        console.log(FB.init)
+
+        // console.log(FBInitParams.appId);
+
+      };
+    }
+  }
+
+
+
+  initFB() {
+    var js,
+      id = 'facebook-jssdk',
+      ref = document.getElementsByTagName('script')[0];
+
+    if (document.getElementById(id)) {
+      return;
+    }
+
+    js = document.createElement('script');
+    js.id = id;
+    js.async = true;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+
+    ref.parentNode.insertBefore(js, ref);
+  }
 
   }
 
- }
+
 
 
