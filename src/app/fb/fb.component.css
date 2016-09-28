@@ -1,36 +1,39 @@
-@import url(http://fonts.googleapis.com/css?family=Merriweather+Sans);
-div.social-wrap button:active {
-    background-color: #000;
-}
-div.social-wrap.b button {
-    padding-right: 45px;
-    height: 35px;
-    background: none;
-    border: none;
-    display: block;
-    background-size: 25px 25px, cover;
-    background-position: 170px center, center center;
-    background-repeat: no-repeat, repeat;
-    border-radius: 4px;
-    color: white;
-    font-family:"Merriweather Sans", sans-serif;
-    font-size: 14px;
-    margin-bottom: 15px;
-    width: 205px;
-    border-bottom: 2px solid transparent;
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
-    box-shadow: 0 4px 2px -2px gray;
-    text-shadow: rgba(0, 0, 0, .4) -1px -1px 0;
+body , .container-fluid {
+    height:100vh;
+    background: url(../img/dark.jpg) no-repeat;
+    background-size: cover;
+    width: 100%;
+    min-width: 100%;
+    position: fixed;
 }
 
+
+h1 {
+    color: #26a636;
+    font-size: 80px;
+    font-family: helvetica;
+    text-align: center;
+
+}
+
+
+.offset-s3 {
+    margin-top: 20%;
+}
+h5 {
+    font-family: helvetica;
+    color: #fff;
+    font-size: 30px;
+    text-align: center;
+    line-height: 1.5;
+    margin: 0 auto;
+}
 button {
-    color : blue;
-}
+    margin-left: 7%;
+    background-color: rgba(32, 148, 243, 0.82);
+    margin-top: 45px;
 
-.container {
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+}
+.offset-s3 {
+    margin-top: 35%;
 }

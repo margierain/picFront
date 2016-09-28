@@ -11,11 +11,6 @@ export class FBConnector {
           xfbml: true,
           version: 'v2.5'
         });
-        console.log('gb')
-        console.log(FB.init)
-
-        // console.log(FBInitParams.appId);
-
       };
     }
   }
