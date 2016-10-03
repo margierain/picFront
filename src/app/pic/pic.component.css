@@ -2,7 +2,23 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+body , .row {
+    height:100vh;
+    background: url(../img/background.jpg) no-repeat;
+    background-size: cover;
+    width: 100%;
+    min-width: 100%;
+    position: fixed;
+}
 
+.chip {
+  margin-top: 1%;
+}
+#logo {
+  font-size: 35px;
+  font-family: helvetica;
+
+}
 #img-editors {
   margin-top: 100px;
 }
@@ -18,7 +34,6 @@
 
 footer {
     clear: both;
-    align-items: center;
     position: fixed;
      left:0px;
      bottom:0px;
@@ -30,5 +45,43 @@ footer.page-footer {
 
 #footer h6{
     padding-left: 45vh;
-}
 
+}
+#upload {
+  margin-left: 87%;
+}
+.file-over {
+ border: dotted 3px red;
+  }
+
+#img-editors, .z-depth-5 {
+  width: 600px;
+  margin-left: -10%;
+  height: 600px;
+  background-color: #D1D1E8;
+  margin-top: 50%;
+}
+#sidebar {
+  margin-top: 4%;
+  width: 350px;
+}
+div.scroll {
+    background-color: #00FFFF;
+    width: 100px;
+    height: 100px;
+    overflow: scroll;
+}
+.btn {
+  display: inline-block;
+  margin-top: 52%;
+
+}
+#share {
+  margin-right: -6%;
+  float: right;
+  margin-top: 95%;
+}
+#save {
+  margin-top: 94%;
+  margin-left: 33%;
+}

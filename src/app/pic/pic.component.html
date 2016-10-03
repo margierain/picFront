@@ -1,24 +1,46 @@
 <div class="row">
-    <div class="container col s12">
-        <nav id="nav" class=" indigo lighten-3">
-            <a href="#" class="brand-logo pink-text text-lighten-1">PimpPic</a>
-            <ul class="right hide-on-med-and-down">
-                <li>
-                    <!-- <a href="youtube.com"><img class="img-circle dropdown-toggle" alt="loading" src="/img/images.png"></a> -->
-                </li>
-            </ul>
-        </nav>
-    </div>
-    <div id="img-editors" class="col s6 push-s4 indigo lighten-4"><span class="flow-text">gvdfhhfjjdsfghdj</span></div>
-    <!-- <div class="col s7 push-s4"><span class="flow-text">editors</span></div>
-    <div class="col s5 pull-s8"><span class="flow-text">images</span></div> -->
-  <!--   <div class="col s12">
-        <footer class="page-footer blue-grey grey darken-3" id="footer">
-            <div class="row ">
-                <div class="container">
-                    <h6 class="pink-text text-lighten-1 ">Welcome to bucketfront built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() ">logout</a></h6>
+    <div>
+        <a href="#" id="logo" class="brand-logo black-text text-lighten-1">PimpPic</a>
+        <ul class="right hide-on-med-and-down">
+            <li>
+                <div class="chip">
+                    <img src="images/images.png" alt="Contact Person"> Margierain
                 </div>
-            </div>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <div id="sidebar" class="col s2 push-s1">
+            <form action="#">
+                <div class="file-field input-field">
+                    <div class="file-path-wrapper">
+                        <i id="upload" class="material-icons prefix">file_upload</i><input placeholder="Upload image" class="file-path validate" type="text">
+                    </div>
+                     <div class="btn">
+                        <p>File</p>
+                        <input type="file">
+                    </div>
+                </div>
+            </form>
+            <form>
+                <input type="text" name="folder" placeholder="folder" #folder>
+                <input (click)="createFolder(folder.value)" type="submit">
+            </form>
+        </div>
+        <div class="col s8 push-s2"><span class="flow-text"><div class="col s12 m2">
+      <p class="z-depth-5">photoes<a id="download" title="download"><i title="download" class="material-icons right">file_download</i></a>
+      <a id="share" title="share"><i class="material-icons">share</i></a>
+      <a id="save" title="save" class="waves-effect waves-light btn">Save</a></p>
+    </div></span>
+        </div>
+    </div>
+    <!-- <div class="scroll">
+You can use the overflow property when you want to have better control of the layout. The default value is visible.
+
+</div> -->
+    <div class="col s12">
+        <footer class="page-footer blue-grey grey darken-1" id="footer">
+            <h6 class="pink-text text-lighten-1 ">Welcome to bucketfront built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() ">logout</a></h6>
         </footer>
-    </div> -->
+    </div>
 </div>
