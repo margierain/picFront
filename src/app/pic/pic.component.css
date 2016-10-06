@@ -23,14 +23,6 @@ body , .row {
   margin-top: 100px;
 }
 
-#nav  {
-    clear: both;
-    align-items: center;
-    position: fixed;
-    left:0px;
-    height:60px;
-    min-width: 100%;
-}
 
 footer {
     clear: both;
@@ -54,12 +46,13 @@ footer.page-footer {
  border: dotted 3px red;
   }
 
-#img-editors, .z-depth-5 {
+#edit_img {
   width: 600px;
-  margin-left: -10%;
   height: 600px;
-  background-color: #D1D1E8;
-  margin-top: 50%;
+  display: flex;
+  margin-top: 10%;
+  position: relative;
+
 }
 #sidebar {
   margin-top: 4%;
@@ -72,16 +65,46 @@ div.scroll {
     overflow: scroll;
 }
 .btn {
-  display: inline-block;
-  margin-top: 52%;
+ /* position: absolute;*/
 
 }
 #share {
-  margin-right: -6%;
-  float: right;
-  margin-top: 95%;
+  margin-left: 71%;
+  position: fixed;
+  margin-top: 55%;
+  flex-grow: 2;
 }
+#download {
+  margin-left: 71%;
+  position: fixed;
+  margin-top: 2%;
+
+}
+
 #save {
-  margin-top: 94%;
-  margin-left: 33%;
+    margin-top: 35.8%;
+    margin-left: 11.4%;
+    background-color: blue;
 }
+
+#right-bar {
+  margin-top: 10%;
+}
+
+/** The overlay-container is an invisible element which contains all individual overlays. */
+.md-overlay-container {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%; }
+
+/** A single overlay pane. */
+.md-overlay-pane {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+  z-index: 1000; }
+
+/*# sourceMappingURL=overlay.css.map */

@@ -1,34 +1,57 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import {UPLOAD_DIRECTIVES} from 'ng2-uploader/ng2-uploader';
+import {MdMenuModule} from '@angular2-material/menu';
+
 
 import { ImageService } from './pic.service';
-import { ImageFields } from './pic';
-import { FolderField } from './folder.ts';
+import { ImageFields } from './photo';
+import { FolderField } from './file.ts';
 
 @Component({
   selector: 'app-pic',
   templateUrl: './pic.component.html',
   styleUrls: ['./pic.component.css'],
-  directives: [UPLOAD_DIRECTIVES ],
-  providers: [],
+  directives: [],
+  providers: [MdMenuModule],
 })
 export class PicComponent implements OnInit {
    foldername: string;
+   noimages = false;
+   index: number = 0;
 
-   @Input() options: Object = {
-    url: 'http://127.0.0.1:8000/' + '/api/images/',
-    authToken: localStorage.getItem('id_token'),
-    authTokenPrefix: "Bearer facebook ",
-    fieldName: 'original_image'
-  };
+   @Input() avatar :any;
+   @Input() username: string;
+   @Input() images: ImageFields[];
+   @Input() selectedImage: ImageFields ;
+   @Input() imagefield: ImageFields[];
+
+  //  @Input() options: Object = {
+  //   url: 'http://127.0.0.1:8000/' + '/api/images/',
+  //   authToken: localStorage.getItem('id_token'),
+  //   authTokenPrefix: "Bearer facebook ",
+  //   fieldName: 'original_image'
+  // };
 
   @Input() folder: FolderField[];
 
   constructor(private imageService:ImageService, private _router: Router ) { }
 
+  // set username and avatar
    ngOnInit() {
+     var profPic = localStorage.getItem('profPic');
+     var profName = localStorage.getItem('profName')
+
+     if (profPic) {
+       this.avatar = profPic;
+       this.username = profName;
+       this.fetchImages()
+       this.fetchfolder()
+     }
+     else {
+       console.log('not found')
+     }
   }
+
 
    // Service called to upload image
   createImages(uploadPic: any) {
@@ -42,7 +65,7 @@ export class PicComponent implements OnInit {
 }
   // Executed when an error occurs on Api call
   logError(err: any) {
-    console.log(err);
+    console.log('log error', err);
     // if (String(err['_body']).indexOf('unique') > 0) {
     //   this.toastr.error("Request not processed");
     // }
@@ -65,5 +88,43 @@ export class PicComponent implements OnInit {
   onCreateFolder() {
     console.log('folder created')
   }
+  // Service  call to fetch images
+  fetchImages() {
+    console.log("start fetch");
+    this.imageService.getImages().subscribe(
+      data => this.onComplete(data),
+      err => this.logError(err),
+      () => console.log('Complete')
+    );
+  }
+
+  onComplete(data:any) {
+    console.log('fetch image')
+    this.images = data
+    console.log(data[this.index].image)
+    if ((this.images).length > 0) {
+      this.noimages = false;
+
+
+    } else {
+      this.noimages = true;
+      }
+    }
+
+    fetchfolder() {
+      this.imageService.getFolders().subscribe(
+      data => this.onFolder(data),
+      err => this.logError(err),
+      () => console.log('Complete')
+    );
+  }
+
+
+    onFolder(data: any) {
+      console.log('folder')
+      console.log(data)
+    }
+
+
 
 }

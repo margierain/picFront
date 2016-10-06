@@ -4,10 +4,10 @@ export class FBConnector {
     constructor(appID:string) {
         //
     if (!window.fbAsyncInit) {
-      //
       window.fbAsyncInit = function() {
         FB.init({
           appId: appID,
+          cookie: true,
           xfbml: true,
           version: 'v2.5'
         });

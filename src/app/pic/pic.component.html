@@ -4,19 +4,51 @@
         <ul class="right hide-on-med-and-down">
             <li>
                 <div class="chip">
-                    <img src="images/images.png" alt="Contact Person"> Margierain
+                    <img src="{{ avatar }}" alt="Contact Person"> {{ username }}
                 </div>
             </li>
         </ul>
     </div>
     <div>
         <div id="sidebar" class="col s2 push-s1">
-            <form action="#">
+        <button md-icon-button [md-menu-trigger-for]="menu">
+   <md-icon>more_vert</md-icon>
+</button>
+
+<md-menu #menu="mdMenu">
+    <button md-menu-item> Refresh </button>
+    <button md-menu-item> Settings </button>
+    <button md-menu-item> Help </button>
+    <button md-menu-item disabled> Sign Out </button>
+</md-menu>
+
+        <!-- <table class="fixed_headers">
+          <thead>
+            <tr>
+              <th>Filter</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table> -->
+        editors
+        </div>
+        <div class="col s5 push-s2">
+            <span class="flow-text">
+                    <div *ngFor=" let pic of images  let s = index "><img id="edit_img" src={{pic.image}}>
+                     <a id="download" title="download"><i title="download" class="material-icons right">file_download</i></a>
+                    <a id="share" title="share"><i class="material-icons">share</i></a>
+                    <a id="save" title="save" class="waves-effect waves-light btn">Save</a>
+                    </div>
+            </span>
+        </div>
+        <div id="right-bar" class="col s2 push-s2">
+        <form action="#">
                 <div class="file-field input-field">
                     <div class="file-path-wrapper">
-                        <i id="upload" class="material-icons prefix">file_upload</i><input placeholder="Upload image" class="file-path validate" type="text">
+                        <i id="upload" class="material-icons prefix">file_upload</i>
+                        <input placeholder="Upload image" class="file-path validate" type="text">
                     </div>
-                     <div class="btn">
+                    <div class="btn">
                         <p>File</p>
                         <input type="file">
                     </div>
@@ -26,14 +58,21 @@
                 <input type="text" name="folder" placeholder="folder" #folder>
                 <input (click)="createFolder(folder.value)" type="submit">
             </form>
+            <ul class="collection">
+                <li class="collection-item avatar">
+                    <p class='dropdown-button btn' data-activates='dropdown1'>Drop Me!</p>
+                    <ul id='dropdown1' class='dropdown-content'>
+                        <li><a href="#!">one</a></li>
+                        <li><a href="#!">two</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#!">three</a></li>
+                    </ul>
+                    <i class="material-icons circle">folder</i>
+                    <span class="title">Title</span>
+                </li>
+            </ul>
+
         </div>
-        <div class="col s8 push-s2"><span class="flow-text"><div class="col s12 m2">
-      <p class="z-depth-5">photoes<a id="download" title="download"><i title="download" class="material-icons right">file_download</i></a>
-      <a id="share" title="share"><i class="material-icons">share</i></a>
-      <a id="save" title="save" class="waves-effect waves-light btn">Save</a></p>
-    </div></span>
-        </div>
-    </div>
     <!-- <div class="scroll">
 You can use the overflow property when you want to have better control of the layout. The default value is visible.
 
