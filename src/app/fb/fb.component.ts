@@ -47,8 +47,10 @@ export class FbComponent implements OnInit {
 
      }
      else if (status === 'not_authorized') {
-         document.getElementById('status').innerHTML = 'Please log ' +
+        console.log('unauth')
+        document.getElementById('status').innerHTML = 'Please log ' +
         'into Facebook.';
+        this.router.navigate(['']);
      }
     }, {scope: 'public_profile', return_scopes: true});
 }

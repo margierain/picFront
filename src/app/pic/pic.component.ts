@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import {MdMenuModule} from '@angular2-material/menu';
-
 
 import { ImageService } from './pic.service';
 import { ImageFields } from './photo';
@@ -12,24 +10,32 @@ import { FolderField } from './file.ts';
   templateUrl: './pic.component.html',
   styleUrls: ['./pic.component.css'],
   directives: [],
-  providers: [MdMenuModule],
+  providers: [],
 })
+
 export class PicComponent implements OnInit {
    foldername: string;
    noimages = false;
    index: number = 0;
+   effects: string;
+   filter = "filter";
+   transform = "transform";
+   enhance = "enhance";
+   edit_image: any;
+
 
    @Input() avatar :any;
    @Input() username: string;
    @Input() images: ImageFields[];
-   @Input() selectedImage: ImageFields ;
+   @Input() selectedImage: ImageFields;
    @Input() imagefield: ImageFields[];
 
+
   //  @Input() options: Object = {
-  //   url: 'http://127.0.0.1:8000/' + '/api/images/',
-  //   authToken: localStorage.getItem('id_token'),
-  //   authTokenPrefix: "Bearer facebook ",
-  //   fieldName: 'original_image'
+  //   url: 'http://127.0.0.1:8000/api/images/',
+  //   authToken: localStorage.getItem('fb_token'),
+  //   authTokenPrefix: "Bearer facebook " + authToken,
+  //   fieldName: 'image'
   // };
 
   @Input() folder: FolderField[];
@@ -98,16 +104,21 @@ export class PicComponent implements OnInit {
     );
   }
 
+
+
   onComplete(data:any) {
     console.log('fetch image')
+    console.log(data)
     this.images = data
+    this.selectedImage = data[this.index]
+    console.log('imj', this.selectedImage)
     console.log(data[this.index].image)
     if ((this.images).length > 0) {
       this.noimages = false;
-
-
     } else {
       this.noimages = true;
+      this.selectedImage = this.images[this.index - 1];
+
       }
     }
 
@@ -124,7 +135,42 @@ export class PicComponent implements OnInit {
       console.log('folder')
       console.log(data)
     }
+    onselect(photo: ImageFields, s: number) {
+      console.log('onselect', s, photo)
 
+      this.selectedImage = photo;
+      this.index = s;
 
+    }
+    applyeffect(effects: string) {
+      console.log('app', effects, this.selectedImage)
+      this.imageService.imageEffects( this.selectedImage,  this.selectedImage.id, this.filter, effects).subscribe(
+      data => this.fetchImages(),
+      err => this.logError(err),
+      () => console.log('apply effects')
+    );
+
+    }
+    applyTransformations(effects: string) {
+      this.imageService.imageEffects(this.selectedImage, this.selectedImage.id, this.transform, effects).subscribe(
+      data => this.fetchImages(),
+      err => this.logError(err),
+      () => console.log('apply transform')
+    );
+
+    }
+
+    updateTextInput(image: ImageFields, value, transform:string, transform_type:string) {
+      console.log('image', image,transform_type, 'tran',transform )
+      this.imageService.imageTranformation(image, image.id, value, transform_type, this.enhance).subscribe(
+        data => this.fetchEditedImage(),
+        err => this.logError(err),
+        () => console.log('apply enhance')
+          );
+
+        }
+    fetchEditedImage() {
+
+        }
 
 }

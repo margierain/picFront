@@ -24,7 +24,7 @@ export class ImageService {
         return this.http.get('http://localhost:8000/api/images/',
             {headers: headers, body: ''})
         .map(res => {
-            // console.log('DATA', res.json());
+            console.log('DATA', res.json());
             return res.json();
          })
         .catch(err => err)
@@ -32,7 +32,7 @@ export class ImageService {
     }
 
     createImage(image: any) {
-        console.log(image)
+        console.log(image, 'idhuidkd')
     var headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
@@ -70,5 +70,40 @@ export class ImageService {
       .map(res => res.json())
       .catch(err => err)
 
+  }
+  imageEffects(pic:any, pid: number, apply: string, effect: string ):Observable<any>  {
+    console.log('number', pid)
+    console.log(apply, effect)
+    var photo = {}
+    photo[apply] = effect
+    console.log('photo', photo)
+    var data = {"effects":  JSON.stringify(photo) }
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
+    console.log('data', data )
+    return this.http.put(
+      'http://localhost:8000/api/images/' + pid + '/', data, {headers: headers }
+    ).map(res => {
+            console.log('Image', res.json());
+            return res.json();
+         })
+  }
+
+  imageTranformation(pic:any, pid: number, transform:string, effect: string, apply: string):Observable<any>  {
+    console.log('number', apply, pic)
+    var photo = {}
+    photo[apply] = [transform, effect]
+    var data = {"effects":  JSON.stringify(photo) }
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
+    console.log('datas', data )
+    return this.http.put(
+      'http://localhost:8000/api/images/' + pid + '/', data, {headers: headers }
+    ).map(res => {
+            console.log('Image', res.json());
+            return res.json();
+         })
   }
 }

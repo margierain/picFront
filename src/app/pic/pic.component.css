@@ -46,16 +46,24 @@ footer.page-footer {
  border: dotted 3px red;
   }
 
-#edit_img {
-  width: 600px;
-  height: 600px;
+#noimage, #edit_img {
+  width: 40vw;
+  height: 60vh;
   display: flex;
   margin-top: 10%;
   position: relative;
+  margin-left: -10%;
 
 }
+.z-depth-5 {
+  padding-top: 50%;
+  text-align: center;
+  font-family: helvetica;
+  color: #fff;
+  background-color: grey;
+}
 #sidebar {
-  margin-top: 4%;
+  margin-top: 7%;
   width: 350px;
 }
 div.scroll {
@@ -64,10 +72,7 @@ div.scroll {
     height: 100px;
     overflow: scroll;
 }
-.btn {
- /* position: absolute;*/
 
-}
 #share {
   margin-left: 71%;
   position: fixed;
@@ -84,27 +89,76 @@ div.scroll {
 #save {
     margin-top: 35.8%;
     margin-left: 11.4%;
-    background-color: blue;
+    background-color: rgba(32, 148, 243, 0.82);
 }
 
 #right-bar {
   margin-top: 10%;
 }
 
-/** The overlay-container is an invisible element which contains all individual overlays. */
-.md-overlay-container {
-  position: absolute;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%; }
+ul.scroll-menu {
+    position: relative;
+    /*display: inherit !important;*/
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -moz-overflow-scrolling: touch;
+    -ms-overflow-scrolling: touch;
+    -o-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+    margin: 0;
+    border-left: none;
+    border-right: none;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    -ms-border-radius: 0 !important;
+    -o-border-radius: 0 !important;
+    border-radius: 0 !important;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -ms-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
+}
+ul.scroll-menu-2x {
+    max-height: 230px;
+}
+.btn-default {
+ width: 35vh;
+}
+h5 > i {
+  float: right;
 
-/** A single overlay pane. */
-.md-overlay-pane {
-  position: absolute;
-  pointer-events: auto;
-  box-sizing: border-box;
-  z-index: 1000; }
+}
+div > button {
+  background-color: black;
+  padding-top: 2%;
+}
+#enhance {
+  padding-top: 25%;
+}
 
-/*# sourceMappingURL=overlay.css.map */
+h5 {
+  color: #26a636;
+}
+h5 > i> li  {
+  color: rgba(32, 148, 243, 0.82);
+}
+ul > b {
+   color: rgba(32, 148, 243, 0.82);
+}
+input[type=range]::-webkit-slider-runnable-track {
+  background: #000;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  background: #26a636;
+}
+li > form > input {
+  float: right;
+}
+

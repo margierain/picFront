@@ -11,38 +11,144 @@
     </div>
     <div>
         <div id="sidebar" class="col s2 push-s1">
-        <button md-icon-button [md-menu-trigger-for]="menu">
-   <md-icon>more_vert</md-icon>
-</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <p>Image effects available</p><span class="caret"></span></button>
+                <ul class="dropdown-menu scroll-menu" role="menu">
+                    <ol>
+                        <h5>Filter<i class="material-icons">photo_filter</i></h5>
+                        <li>
+                            <form>
+                                Blur<input #blur type="checkbox" name="filter" value=blur>
+                                <input (click)="effects=blur.value;  applyeffect(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Contour<input #contour type="checkbox" name="filter" value=contour>
+                                <input (click)="effects=contour.value; applyeffect(effects) " type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Edge Ehnance<input #edgeEhnance type="checkbox" name="filter" value=edge_enhance>
+                                <input (click)="effects=edgeEnhance.value; applyeffect(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                            Emboss<input #emboss type="checkbox" name="filter" value=emboss>
+                                <input (click)="effects=emboss.value; applyeffect(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Smooth<input #smooth type="checkbox" name="filter" value=smooth>
+                                <input (click)="effects=smooth.value; applyeffect(effects)"  type="submit" value="Apply">
+                            </form></li>
+                            <li><form>
+                                Edge_enhance_more<input #edge type="checkbox" name="filter" value=edge_enhance_more>
+                                <input (click)="effects=edge.value; applyeffect(effects)" type="submit" value="Apply">
+                            </form></li>
+                            <li><form>
+                                Detail<input #detail type="checkbox" name="filter" value=detail>
+                                <input (click)="effects=detail.value; applyeffect(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Sharpen<input #sharpen type="checkbox" name="filter" value=sharpen>
+                                <input (click)="effects=sharpen.value; applyeffect(effects)" type="submit" value="Apply">
+                            </form></li>
+                         <li><form>
+                                Find_edges<input #find_edges type="checkbox" name="filter" value=find_edges>
+                                <input (click)="effects=find_edges.value; applyeffect(effects)" type="submit" value="Apply">
+                            </form></li>
 
-<md-menu #menu="mdMenu">
-    <button md-menu-item> Refresh </button>
-    <button md-menu-item> Settings </button>
-    <button md-menu-item> Help </button>
-    <button md-menu-item disabled> Sign Out </button>
-</md-menu>
-
-        <!-- <table class="fixed_headers">
-          <thead>
-            <tr>
-              <th>Filter</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table> -->
-        editors
+                    </ol>
+                    <ol>
+                        <h5>Transform<i class="material-icons">zoom_out_map</i></h5>
+                        <li><form>
+                                Vertical Flip<input #flip type="checkbox" name="transform" value=vertical_flip>
+                                <input (click)="effects=flip.value; applyTransformations(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Mirror<input #mirror type="checkbox" name="transform" value=mirror>
+                                <input (click)="effects=mirror.value; applyTransformations(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Invert<input #invert type="checkbox" name="transform" value=invert>
+                                <input (click)="effects=invert.value; applyTransformations(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Gray Scale<input #scale type="checkbox" name="transform" value=grayscale>
+                                <input (click)="effects=scale.value; applyTransformations(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Black and White<input #blackWhite type="checkbox" name="transform" value=black_and_white>
+                                <input (click)="effects=blackWhite.value; applyTransformations(effects)" type="submit" value="Apply">
+                            </form></li>
+                        <li><form>
+                                Equalize<input #equalize type="checkbox" name="transform" value=equalize>
+                                <input (click)="effects=equalize.value; applyTransformations(effects)" type="submit" value="Apply">
+                            </form></li>
+                    </ol>
+                </ul>
+            </div>
+            <div id="enhance">
+                <ul class="dropdown-menu scroll-menu" role="menu">
+                <h5>Enhance</h5>
+                <b>Brightness</b>
+                <input #brightness type="range" min="0" max="10" step="1" (change)="updateTextInput(brightness.value, 'brightness')" />
+                <b>Contrast</b>
+                <input #contrast type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(contrast.value, 'contrast')"/>
+                <b>Color</b>
+                <input #color type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(color.value, 'colorize')" />
+                <b>Sharpen</b>
+                <input #sharpen type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(sharpen.value, 'sharpen')" />
+                <h5>Effects</h5>
+                <b>Quantize</b>
+                <input #quantize type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(quantize.value, 'quantize')"/>
+                <b>Gaussian Blur</b>
+                <input #gaussian_blur type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(gaussian_blur.value, 'gaussian_blur')"/>
+                <b>Auto contrast</b>
+                <input #auto_contrast type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(auto_contrast.value, 'auto_contrast')"/>
+                <b>Posterize</b>
+                <input #posterize type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(posterize.value, 'posterize')"/>
+                <b>Solarize</b>
+                <input #solarize type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(solarize.value, 'solarize')"/>
+                <b>Zoom</b>
+                <input #zoom type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(zoom.value, 'zoom')" />
+                <b>Rotate</b>
+                <input #rotate type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(rotate.value, 'rotate')"/>
+                </ul>
+            </div>
         </div>
         <div class="col s5 push-s2">
             <span class="flow-text">
-                    <div *ngFor=" let pic of images  let s = index "><img id="edit_img" src={{pic.image}}>
+                <div id="noimage" *ngIf="selectedImage " class="col s12 m2">
+                  <div class="z-depth-5"><p>Hey {{ username }}! Go ahead and Upload your first image and have fun editing it.</p><br>
+                  <form>
+                      <input #pic type="file" name="fileToUpload" id="fileToUpload">
+                      <input type="submit" (click)="createImages(pic.value)" value="Upload Image" name="submit">
+                  </form>
+                  <!-- <form>
+                    <div class="file-field input-field">
+                        <div class="file-path-wrapper">
+                            <i id="upload" class="material-icons prefix">file_upload</i>
+                            <input placeholder="Upload image" class="file-path validate" type="text">
+                        </div>
+                        <div class="btn">
+                            <p>File</p>
+                            <input type="file">
+                        </div>
+                    </div>
+                </form> -->
+                  </div>
+                </div>
+                   <!--  <div *ngIf="selectedImage "><img class="responsive-img" id="edit_img" src={{selectedImage.edited_image}}>
                      <a id="download" title="download"><i title="download" class="material-icons right">file_download</i></a>
                     <a id="share" title="share"><i class="material-icons">share</i></a>
                     <a id="save" title="save" class="waves-effect waves-light btn">Save</a>
-                    </div>
+                    </div> -->
             </span>
         </div>
         <div id="right-bar" class="col s2 push-s2">
-        <form action="#">
+            <form>
+            <!-- *ngFor=" let pic of images  let s = index " (click)="onselect(pic,s)" -->
+                <input type="text" name="folder" placeholder="folder" #folder>
+                <input (click)="createFolder(folder.value)" type="submit">
+                <!-- gfhd -->
                 <div class="file-field input-field">
                     <div class="file-path-wrapper">
                         <i id="upload" class="material-icons prefix">file_upload</i>
@@ -54,32 +160,10 @@
                     </div>
                 </div>
             </form>
-            <form>
-                <input type="text" name="folder" placeholder="folder" #folder>
-                <input (click)="createFolder(folder.value)" type="submit">
-            </form>
-            <ul class="collection">
-                <li class="collection-item avatar">
-                    <p class='dropdown-button btn' data-activates='dropdown1'>Drop Me!</p>
-                    <ul id='dropdown1' class='dropdown-content'>
-                        <li><a href="#!">one</a></li>
-                        <li><a href="#!">two</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#!">three</a></li>
-                    </ul>
-                    <i class="material-icons circle">folder</i>
-                    <span class="title">Title</span>
-                </li>
-            </ul>
-
         </div>
-    <!-- <div class="scroll">
-You can use the overflow property when you want to have better control of the layout. The default value is visible.
-
-</div> -->
-    <div class="col s12">
-        <footer class="page-footer blue-grey grey darken-1" id="footer">
-            <h6 class="pink-text text-lighten-1 ">Welcome to bucketfront built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() ">logout</a></h6>
-        </footer>
+        <div class="col s12">
+            <footer class="page-footer black" id="footer">
+                <h6 class="white-text  ">Welcome to bucketfront built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() ">logout</a></h6>
+            </footer>
+        </div>
     </div>
-</div>
