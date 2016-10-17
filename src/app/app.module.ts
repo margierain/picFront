@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
+// import { FileUploader } from 'ng2-file-upload';
 
 import { Http, Headers, HTTP_PROVIDERS } from '@angular/http';
 import { AppComponent } from './app.component';
@@ -24,7 +24,7 @@ import { ImageService } from './pic/pic.service';
     FormsModule,
     HttpModule,
     routing,
-
+    // FileUploader,
 
   ],
   providers: [Http, HTTP_PROVIDERS, ImageService],

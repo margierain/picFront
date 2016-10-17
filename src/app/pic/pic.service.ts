@@ -24,15 +24,34 @@ export class ImageService {
         return this.http.get('http://localhost:8000/api/images/',
             {headers: headers, body: ''})
         .map(res => {
-            console.log('DATA', res.json());
+            // console.log('DATA', res.json());
             return res.json();
          })
         .catch(err => err)
 
     }
 
+    // Api call to upload image
+    getSingleImage(pid: number): Observable<any> {
+      console.log(pid, 'gfgh')
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
+        return this.http.get('http://localhost:8000/api/images/' +  pid + '/',
+            {headers: headers, body: ''})
+        .map(res => {
+            console.log('Single', res.json());
+            var singleImage = res.json();
+            singleImage.edited_image += '?' + Math.random();
+            return singleImage;
+         })
+        .catch(err => err)
+
+    }
+     // this.edit_image =  this.selectedImage.edited_image + '?' + this.currentTime;
+     //  console.log('vcvh',  this.edit_image)
+
     createImage(image: any) {
-        console.log(image, 'idhuidkd')
     var headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
@@ -42,7 +61,7 @@ export class ImageService {
       headers: headers
     })
      .map(res => {
-            console.log('DATA', res.json());
+            // console.log('DATA', res.json());
             return res.json();
          })
 
@@ -72,16 +91,12 @@ export class ImageService {
 
   }
   imageEffects(pic:any, pid: number, apply: string, effect: string ):Observable<any>  {
-    console.log('number', pid)
-    console.log(apply, effect)
     var photo = {}
     photo[apply] = effect
-    console.log('photo', photo)
     var data = {"effects":  JSON.stringify(photo) }
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    console.log('data', data )
     return this.http.put(
       'http://localhost:8000/api/images/' + pid + '/', data, {headers: headers }
     ).map(res => {
@@ -91,9 +106,9 @@ export class ImageService {
   }
 
   imageTranformation(pic:any, pid: number, transform:string, effect: string, apply: string):Observable<any>  {
-    console.log('number', apply, pic)
+    console.log('number', transform, effect)
     var photo = {}
-    photo[apply] = [transform, effect]
+    photo[apply] = [effect, transform,]
     var data = {"effects":  JSON.stringify(photo) }
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');

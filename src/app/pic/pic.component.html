@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row rows">
     <div>
         <a href="#" id="logo" class="brand-logo black-text text-lighten-1">PimpPic</a>
         <ul class="right hide-on-med-and-down">
@@ -27,8 +27,8 @@
                                 <input (click)="effects=contour.value; applyeffect(effects) " type="submit" value="Apply">
                             </form></li>
                         <li><form>
-                                Edge Ehnance<input #edgeEhnance type="checkbox" name="filter" value=edge_enhance>
-                                <input (click)="effects=edgeEnhance.value; applyeffect(effects)" type="submit" value="Apply">
+                                Edge Ehnance<input #ehnance type="checkbox" name="filter" value=edge_enhance>
+                                <input (click)="effects=enhance.value; applyeffect(effects)" type="submit" value="Apply">
                             </form></li>
                         <li><form>
                             Emboss<input #emboss type="checkbox" name="filter" value=emboss>
@@ -89,59 +89,45 @@
                 <ul class="dropdown-menu scroll-menu" role="menu">
                 <h5>Enhance</h5>
                 <b>Brightness</b>
-                <input #brightness type="range" min="0" max="10" step="1" (change)="updateTextInput(brightness.value, 'brightness')" />
+                <input #brightness type="range" min="0" max="10" step="1" (change)="effectScale(brightness.value, 'Brightness')" />
                 <b>Contrast</b>
-                <input #contrast type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(contrast.value, 'contrast')"/>
+                <input #contrast type="range" min="0" max="10" value="5" step="1" (change)="effectScale(contrast.value, 'Contrast')"/>
                 <b>Color</b>
-                <input #color type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(color.value, 'colorize')" />
+                <input #color type="range" min="0" max="10" value="5" step="1" (change)="effectScale(color.value, 'Color')" />
                 <b>Sharpen</b>
-                <input #sharpen type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(sharpen.value, 'sharpen')" />
+                <input #sharpen type="range" min="0" max="10" value="5" step="1" (change)="effectScale(sharpen.value, 'Sharpness')" />
                 <h5>Effects</h5>
                 <b>Quantize</b>
-                <input #quantize type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(quantize.value, 'quantize')"/>
+                <input #quantize type="range" min="0" max="10" value="5" step="1" (change)="effect(quantize.value, 'quantize')"/>
                 <b>Gaussian Blur</b>
-                <input #gaussian_blur type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(gaussian_blur.value, 'gaussian_blur')"/>
+                <input #gaussian_blur type="range" min="0" max="10" value="5" step="1" (change)="effect(gaussian_blur.value, 'gaussian_blur')"/>
                 <b>Auto contrast</b>
-                <input #auto_contrast type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(auto_contrast.value, 'auto_contrast')"/>
+                <input #auto_contrast type="range" min="0" max="10" value="5" step="1" (change)="effect(auto_contrast.value, 'auto_contrast')"/>
                 <b>Posterize</b>
-                <input #posterize type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(posterize.value, 'posterize')"/>
+                <input #posterize type="range" min="0" max="10" value="5" step="1" (change)="effect(posterize.value, 'posterize')"/>
                 <b>Solarize</b>
-                <input #solarize type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(solarize.value, 'solarize')"/>
+                <input #solarize type="range" min="0" max="10" value="5" step="1" (change)="effect(solarize.value, 'solarize')"/>
                 <b>Zoom</b>
-                <input #zoom type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(zoom.value, 'zoom')" />
+                <input #zoom type="range" min="0" max="10" value="5" step="1" (change)="effect(zoom.value, 'zoom')" />
                 <b>Rotate</b>
-                <input #rotate type="range" min="0" max="10" value="5" step="1" (change)="updateTextInput(rotate.value, 'rotate')"/>
+                <input #rotate type="range" min="0" max="10" value="5" step="1" (change)="effect(rotate.value, 'rotate')"/>
                 </ul>
             </div>
         </div>
         <div class="col s5 push-s2">
-            <span class="flow-text">
-                <div id="noimage" *ngIf="selectedImage " class="col s12 m2">
-                  <div class="z-depth-5"><p>Hey {{ username }}! Go ahead and Upload your first image and have fun editing it.</p><br>
-                  <form>
-                      <input #pic type="file" name="fileToUpload" id="fileToUpload">
-                      <input type="submit" (click)="createImages(pic.value)" value="Upload Image" name="submit">
-                  </form>
-                  <!-- <form>
-                    <div class="file-field input-field">
-                        <div class="file-path-wrapper">
-                            <i id="upload" class="material-icons prefix">file_upload</i>
-                            <input placeholder="Upload image" class="file-path validate" type="text">
-                        </div>
-                        <div class="btn">
-                            <p>File</p>
-                            <input type="file">
-                        </div>
-                    </div>
-                </form> -->
+
+                <div class="col s12 m2">
+                  <div id="noimage" *ngIf="noimage"class="z-depth-5"><p>Hey {{ username }}! Go ahead and Upload your first image and have fun editing it.</p><br>
+                     <input type="file" multiple (change)="fileChange(input)" #input />
+                     <!-- <input type="file" ng2FileSelect [uploader]="uploader" /> -->
                   </div>
                 </div>
-                   <!--  <div *ngIf="selectedImage "><img class="responsive-img" id="edit_img" src={{selectedImage.edited_image}}>
+                    <div *ngIf="edit_image "><img class="responsive-img" id="edit_img" src="{{edit_image.image}}">
                      <a id="download" title="download"><i title="download" class="material-icons right">file_download</i></a>
                     <a id="share" title="share"><i class="material-icons">share</i></a>
                     <a id="save" title="save" class="waves-effect waves-light btn">Save</a>
-                    </div> -->
-            </span>
+                    </div>
+
         </div>
         <div id="right-bar" class="col s2 push-s2">
             <form>
@@ -149,7 +135,7 @@
                 <input type="text" name="folder" placeholder="folder" #folder>
                 <input (click)="createFolder(folder.value)" type="submit">
                 <!-- gfhd -->
-                <div class="file-field input-field">
+                <!-- <div class="file-field input-field">
                     <div class="file-path-wrapper">
                         <i id="upload" class="material-icons prefix">file_upload</i>
                         <input placeholder="Upload image" class="file-path validate" type="text">
@@ -158,12 +144,27 @@
                         <p>File</p>
                         <input type="file">
                     </div>
-                </div>
+                </div> -->
             </form>
-        </div>
+            <button (click)="modalToggle.open()" class="btn">Modal</button>
+
         <div class="col s12">
             <footer class="page-footer black" id="footer">
-                <h6 class="white-text  ">Welcome to bucketfront built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() ">logout</a></h6>
+                <h6 class="white-text  ">Welcome to pimpic built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() ">logout</a></h6>
             </footer>
         </div>
     </div>
+<!--  Modal window -->
+<div class="outer" *ngIf="open">
+ <div class="popup">
+    <div class="row dropdown-menu scroll-menu " role="menu">
+        <ul class="dropdown-menu scroll-menu ">
+      <div class="col s4" *ngFor=" let pic of images  let s = index">
+      <img class="responsive-img" id="img" src="{{pic.image}}">
+      <input type="submit" value=edit (click)=" onEdit(pic)">
+      </div>
+        </ul>
+      </div>
+ </div>
+ <div class="popup-bg" (click)="modalToggle.close()"></div>
+</div>
