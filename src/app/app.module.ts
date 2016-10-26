@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-// import { FileUploader } from 'ng2-file-upload';
-
+import { UPLOAD_DIRECTIVES } from 'ng2-uploader/ng2-uploader';
+import { Ng2Bs3ModalModule,  ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 import { Http, Headers, HTTP_PROVIDERS } from '@angular/http';
 import { AppComponent } from './app.component';
 import { FbComponent } from './fb/fb.component';
@@ -16,7 +16,7 @@ import { ImageService } from './pic/pic.service';
 
 @NgModule({
   declarations: [
-    AppComponent, FbComponent, PicComponent,
+    AppComponent, FbComponent, PicComponent, UPLOAD_DIRECTIVES,
 
   ],
   imports: [
@@ -24,7 +24,9 @@ import { ImageService } from './pic/pic.service';
     FormsModule,
     HttpModule,
     routing,
-    // FileUploader,
+    Ng2Bs3ModalModule ,
+    
+    
 
   ],
   providers: [Http, HTTP_PROVIDERS, ImageService],

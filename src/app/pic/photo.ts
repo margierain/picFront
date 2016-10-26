@@ -1,7 +1,7 @@
 export interface ImageFields {
   id: number;
   image: string;
-  effects?: any;
+  effects: any;
   edited_image?: string;
   date_created: string;
   date_modified: string;

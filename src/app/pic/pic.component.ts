@@ -1,19 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ImageService } from './pic.service';
 import { ImageFields } from './photo';
 import { FolderField } from './file.ts';
-// import { FileUploader } from 'ng2-file-upload';
 
-// upload url
+import { UPLOAD_DIRECTIVES } from 'ng2-uploader/ng2-uploader';
+import { Ng2Bs3ModalModule, ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
+
+import { ToastComponent } from '../shared/toast.component';
+
 const URL = 'http://localhost:8000/api/images/';
+var fb_token = localStorage.getItem('fb_token');
 
 @Component({
   selector: 'app-pic',
   templateUrl: './pic.component.html',
   styleUrls: ['./pic.component.css'],
-  directives: [],
-  providers: [],
+  directives: [ModalComponent, ToastComponent],
+  providers: [Ng2Bs3ModalModule ],
 })
 
 export class PicComponent implements OnInit {
@@ -25,9 +29,32 @@ export class PicComponent implements OnInit {
    transform = "transform";
    enhance = "enhance";
    effectRange ="effect";
-   edit_image: any;
-   currentTime = Math.random();
+   edit_image:boolean = false;
    open: boolean = false;
+   opens: boolean = false;
+   no_folder: boolean = false;
+
+  uploadFile: any;
+  imageDropped = false;
+  uploadProgress: number;
+  uploadResponse: Object;
+  dropProgress: number = 0;
+  dropResp: any[] = [];
+  
+  server_url = "";
+  not_editted:boolean = false;
+
+  @ViewChild(ToastComponent) toast: ToastComponent;
+  toastMessage: string = '';
+
+   
+   @Input() options: Object = {
+    url: URL,
+    allowedExtensions: ['image/png', 'image/jpg', 'image/jpeg'],
+    authToken: localStorage.getItem('fb_token'),
+    authTokenPrefix: "Bearer facebook ",
+    fieldName: 'image'
+  };
 
 
    @Input() avatar :any;
@@ -35,7 +62,9 @@ export class PicComponent implements OnInit {
    @Input() images: ImageFields[];
    @Input() selectedImage: ImageFields;
    @Input() imagefield: ImageFields[];
-   // public uploader:FileUploader = new FileUploader({url: URL});
+   @Input() folders: FolderField[];
+   @Input() selectedFolder: FolderField;
+   @Input() folderimages: FolderField[];
 
 
 
@@ -47,10 +76,26 @@ export class PicComponent implements OnInit {
     open: () => this.open = true,
     close: () => this.open = false
   }
+
+  otherToggle = {
+    open: () => this.opens = true,
+    close: () => this.opens = false
+  }
+
+  @ViewChild('editModal')
+  editmodal: ModalComponent;
+
+  onClose() {
+    this.createFolder(this.foldername);
+  }
+
+
+
   // set username and avatar
    ngOnInit() {
      var profPic = localStorage.getItem('profPic');
-     var profName = localStorage.getItem('profName')
+     var profName = localStorage.getItem('profName');
+     
 
      if (profPic) {
        this.avatar = profPic;
@@ -64,16 +109,6 @@ export class PicComponent implements OnInit {
   }
 
 
-   // Service called to upload image
-  createImages(uploadPic: any) {
-    console.log(uploadPic)
-    console.log('hilly')
-    this.imageService.createImage(uploadPic).subscribe(
-      err => this.logError(err),
-      () => console.log('Added successful')
-    );
-
-}
   // Executed when an error occurs on Api call
   logError(err: any) {
     console.log( err);
@@ -86,20 +121,32 @@ export class PicComponent implements OnInit {
     //   this._router.navigate(['']);
     // }
   }
-  createFolder(foldername: string) {
-    console.log('jill')
-    console.log(foldername)
-    this.imageService.createFolder(foldername).subscribe(
-      data => this.onCreateFolder(),
+  // Calls create folder service
+  createFolder(form) {
+    console.log(form);
+    let foldername = form.value;
+    this.imageService.createFolder(foldername.folder).subscribe(
+      data => this.onCreateFolder(data),
       err => this.logError(err),
       () => console.log('Added successful')
     );
 
+    this.foldername = '';
+  }
+  // Retrieve photoes in a folder
+  folderPhotoes(folder:any) {
+    console.log('new', folder)
 
   }
-  onCreateFolder() {
-    console.log('folder created')
+
+  onCreateFolder(data:any) {
+
+    this.fetchfolder()
+    this.toastMessage = "successfully created folder";
+    this.toast.open();
+    // this.toasterService.pop('success', '', 'Folder successfully created');
   }
+
   // Service  call to fetch images
   fetchImages() {
     console.log("start fetch");
@@ -109,20 +156,28 @@ export class PicComponent implements OnInit {
       () => console.log('Complete')
     );
   }
+  deletefolder() {
 
+  }
+
+  editfolder() {
+
+  }
 
 
   onComplete(data:any) {
+    console.log('here', data)
     this.images = data
+    console.log(data)
     this.selectedImage = data[this.index]
-    console.log('imj', this.selectedImage)
-    console.log(data[this.index].image)
-    if ((this.images).length > 0) {
-      this.noimages = false;
-      this.fetchEditedImage()
+    console.log('imj', this.selectedImage, (this.images).length)
+    if ((this.images).length === 0) {
+      this.noimages = true;
 
     } else {
-      this.noimages = true;
+      console.log('hapa')
+      this.fetchEditedImage()
+      this.noimages = false;
       this.selectedImage = this.images[this.index - 1];
       }
     }
@@ -137,9 +192,17 @@ export class PicComponent implements OnInit {
 
 
     onFolder(data: any) {
+      this.folders = data
+      if(data.length < 1) {
+        this.no_folder = true;
+      }
+      else {
+         this.no_folder = false;
+      }
 
-      console.log(data)
+      
     }
+
     onselect(photo: ImageFields, s: number) {
       console.log(photo, s, 'onselect')
       this.selectedImage = photo;
@@ -189,9 +252,59 @@ export class PicComponent implements OnInit {
         }
 
      onEdit(pic:any) {
-       console.log('hill', pic)
-       this.edit_image = pic
+       console.log('kill', pic)
+       this.selectedImage = pic
+       this.modalToggle.close()
+       if (pic['edited_image'] === null  || (pic['edited_image'].indexOf('null') > -1)) {
+       
+         console.log('pics ')
+         this.not_editted = true;
+         
+       }
+       
+       else {
+         console.log('editting')
+         this.not_editted = false;
+         this.edit_image = true;
+
+       }
+       
 
      }
+     handleUpload(data): void {
+     this.imageDropped = true;
+     this.uploadFile = data;
+      
+    if (data && data.response) {
+
+      this.imageDropped = false;
+      this.uploadProgress = 0;
+      data = JSON.parse(data.response);
+      this.uploadFile = data;
+      this.selectedImage = data;
+      console.log('Image Uploaded', this.selectedImage )
+      this.onEdit(data)
+      // this.toasterService.pop('success', 'Success', 'Image successfully Uploaded');
+      this.fetchImages() 
+     
+     
+    }
+  }
+
+  logOut() {
+    localStorage.removeItem('auth_token');
+    this._router.navigate(['/']);
+  }
+  shareImage() {
+    FB.ui({
+      method: 'share',
+      href: this.selectedImage.image,
+      picture: this.selectedImage.image
+    }, function (response) { });
+  }
+
+  showDetails(pic) {
+    console.log('mimi')
+  }
 
 }

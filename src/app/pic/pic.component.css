@@ -15,15 +15,21 @@ body , .rows {
   margin-top: 1%;
 }
 #logo {
-  font-size: 35px;
-  font-family: helvetica;
+  font-size: 40px;
+    font-family: helvetica;
+    margin-top: 1%;
+    margin-left: -71%;
 
 }
 #img-editors {
   margin-top: 100px;
 }
 
-
+.file {
+  border: dotted 3px green;
+  margin-left: 10%;
+  width: 75%;
+}
 footer {
     clear: both;
     position: fixed;
@@ -46,25 +52,92 @@ footer.page-footer {
  border: dotted 3px red;
   }
 
-#noimage, #edit_img {
+#edit_img {
   width: 40vw;
   height: 60vh;
-  display: flex;
-  margin-top: 10%;
+  margin-top: 2%;
+  position: relative;
+  margin-left: -28%;
+}
+
+#noimage {
+  width: 40vw;
+  height: 60vh;
   position: relative;
   margin-left: -10%;
+  margin-left: -123%;
 
 }
+
+
+/*.wrapper { 
+        margin-top: 5%;
+        background:#EFEFEF; 
+        box-shadow: 1px 1px 10px #999; 
+        text-align: center; 
+        position: relative;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        margin-bottom: 20px !important;
+        width: 80%;
+        height: 50%;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        margin-left: -2%;
+      }
+
+.scrolls { 
+    overflow-x: scroll;
+    overflow-y: hidden;
+    height: 80px;
+    white-space:nowrap;
+    width: 100%;
+} 
+
+.imageDiv img { 
+    box-shadow: 1px 1px 10px #999; 
+    margin: 2px;
+    max-height: 150%;
+    cursor: pointer;
+    display:inline-block;
+    *display:inline;
+    *zoom:1;
+    vertical-align:top;
+    }*/
+
+#img {
+ display: inline;
+ 
+
+}
+
+#edit_button {
+  width: 10%;
+  background-color: #fff;
+   border-radius: 25px;
+   font-size: 10px;
+   text-align: center;
+
+}
+
+div > p  {
+  margin-top: -20%;
+  text-align: center;
+  color: rgba(32, 148, 243, 0.82);
+ 
+}
 .z-depth-5 {
-  padding-top: 50%;
+  padding-top: 382%;
   text-align: center;
   font-family: helvetica;
-  color: #fff;
-  background-color: grey;
+  color: #000;
+  
 }
 #sidebar {
-  margin-top: 7%;
-  width: 350px;
+  margin-top: 2%;
+  width: 23%;
+  margin-left: -4%;
 }
 div.scroll {
     background-color: #00FFFF;
@@ -72,24 +145,25 @@ div.scroll {
     height: 100px;
     overflow: scroll;
 }
+#folder {
+    margin-top: -44%;
+
+}
 
 #share {
-  margin-left: 71%;
-  position: fixed;
-  margin-top: 55%;
-  flex-grow: 2;
-}
-#download {
-  margin-left: 71%;
-  position: fixed;
-  margin-top: 2%;
-
-}
-
-#save {
-    margin-top: 35.8%;
-    margin-left: 11.4%;
-    background-color: rgba(32, 148, 243, 0.82);
+    margin-top: -3%;
+    margin-left: 100%;
+    margin-top: 8%;
+    background-color: #e4e4e4;
+    color: rgba(0,0,0,0.6);
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    padding-right: 1%;
+    padding-left: 1%;
+    margin-top: -3.5%;
+    margin-left: 84%;
+    
 }
 
 #right-bar {
@@ -137,9 +211,12 @@ h5 > i {
 div > button {
   background-color: black;
   padding-top: 2%;
+  width: 93%;
+  margin-left: 9%;
 }
 #enhance {
   padding-top: 25%;
+  padding-left: 14%;
 }
 
 h5 {
@@ -159,6 +236,16 @@ input[type=range]::-webkit-slider-thumb {
   background: #26a636;
 }
 li > form > input {
+  float: right;
+}
+div > input {
+  padding-top: 6%;
+  padding-left: 20%;
+  margin-top: 11%;
+  
+}
+#delete, #edit{
+  font-size: 16px;
   float: right;
 }
 /* pop up*/
@@ -191,4 +278,35 @@ li > form > input {
   width: 100%;
   z-index: 95;
   height: 100%;
+}
+ .file-over { 
+  border: dotted 3px red;
+   } 
+
+
+div.scrolls {
+   background-color: #fff;
+    color: #000;
+    text-align: center;
+    padding: 14px;
+    overflow: auto;
+    overflow-x: scroll;
+    white-space:nowrap;
+    height: 100px;
+    width: 100%;
+    margin-left: -10%;
+
+    
+}
+div.scrolls > img {
+   width: 100px;
+   height: 100px;
+   display: inline;
+   text-align: center;
+    max-width: 0 !important;
+
+}
+
+div.scrolls a:hover {
+    background-color: #777;
 }

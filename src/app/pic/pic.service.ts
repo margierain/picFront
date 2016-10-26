@@ -16,6 +16,7 @@ export class ImageService {
 
     }
 
+
     // Api call to upload image
     getImages(): Observable<ImageFields[]> {
         var headers = new Headers();
@@ -25,6 +26,20 @@ export class ImageService {
             {headers: headers, body: ''})
         .map(res => {
             // console.log('DATA', res.json());
+            return res.json();
+         })
+        .catch(err => err)
+
+    }
+    // Api call to upload image
+    getImagesInFolder(fid:number, pid:number): Observable<any> {
+        var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
+        return this.http.get('http://localhost:8000/api/folders/' +  fid + '/images/' + pid + '/',
+            {headers: headers, body: ''})
+        .map(res => {
+            console.log('folder', res.json());
             return res.json();
          })
         .catch(err => err)
@@ -48,31 +63,13 @@ export class ImageService {
         .catch(err => err)
 
     }
-     // this.edit_image =  this.selectedImage.edited_image + '?' + this.currentTime;
-     //  console.log('vcvh',  this.edit_image)
-
-    createImage(image: any) {
-    var headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    console.log(headers)
-    return this.http.post('http://localhost:8000/api/images/', JSON.stringify({ "image": image }), {
-
-      headers: headers
-    })
-     .map(res => {
-            // console.log('DATA', res.json());
-            return res.json();
-         })
-
-  }
+     
+    
 
   createFolder(folder: string) {
-        console.log(folder)
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    console.log(headers)
     return this.http.post('http://localhost:8000/api/folders/', JSON.stringify({ "name": folder }), {
 
       headers: headers
@@ -90,10 +87,21 @@ export class ImageService {
       .catch(err => err)
 
   }
+  // Api call to delete a folder
+  deletefolder(bid: number): Observable<any> {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'JWT ' + localStorage.getItem('auth_token'));
+    return this.http.delete('http://localhost:8000/api/folders/' + bid + '/', {
+      headers: headers
+    });
+  }
+
   imageEffects(pic:any, pid: number, apply: string, effect: string ):Observable<any>  {
     var photo = {}
     photo[apply] = effect
     var data = {"effects":  JSON.stringify(photo) }
+    console.log('me',data)
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
