@@ -10,6 +10,9 @@ import { Ng2Bs3ModalModule, ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 import { ToastComponent } from '../shared/toast.component';
 
 const URL = 'http://localhost:8000/api/images/';
+// const FOLDER_URL = 'http://localhost:8000/api/folders/' + this.selectedFolderName.id + '/images/';
+// console.log('url', FOLDER_URL)
+
 var fb_token = localStorage.getItem('fb_token');
 
 @Component({
@@ -21,6 +24,9 @@ var fb_token = localStorage.getItem('fb_token');
 })
 
 export class PicComponent implements OnInit {
+   selectedFolderName: any;
+   isInFolder:boolean = false;
+   imageUrl:string;
    foldername: string;
    noimages = false;
    index: number = 0;
@@ -33,6 +39,7 @@ export class PicComponent implements OnInit {
    open: boolean = false;
    opens: boolean = false;
    no_folder: boolean = false;
+   position: number = 0;
 
   uploadFile: any;
   imageDropped = false;
@@ -40,21 +47,28 @@ export class PicComponent implements OnInit {
   uploadResponse: Object;
   dropProgress: number = 0;
   dropResp: any[] = [];
-  
+  pos: any;
   server_url = "";
   not_editted:boolean = false;
+
+  FOLDER_URL: any = 'http://localhost:8000/api/folders/' + this.selectedFolderName + '/images/';
+
 
   @ViewChild(ToastComponent) toast: ToastComponent;
   toastMessage: string = '';
 
-   
    @Input() options: Object = {
     url: URL,
     allowedExtensions: ['image/png', 'image/jpg', 'image/jpeg'],
     authToken: localStorage.getItem('fb_token'),
     authTokenPrefix: "Bearer facebook ",
     fieldName: 'image'
-  };
+    // data: {
+    //    "name": this.selectedFolderName
+    //  },
+
+
+ };
 
 
    @Input() avatar :any;
@@ -66,9 +80,11 @@ export class PicComponent implements OnInit {
    @Input() selectedFolder: FolderField;
    @Input() folderimages: FolderField[];
 
+   @Input() imagecount: number;
+   @Input() folder: FolderField;
 
-
-  @Input() folder: FolderField[];
+   // @Input() public selectdeletefolder: Folder;
+   // @Input() public selectdeleteImage: images;
 
   constructor(private imageService:ImageService, private _router: Router ) { }
 
@@ -78,7 +94,7 @@ export class PicComponent implements OnInit {
   }
 
   otherToggle = {
-    open: () => this.opens = true,
+    opens: () => this.opens = true,
     close: () => this.opens = false
   }
 
@@ -87,7 +103,7 @@ export class PicComponent implements OnInit {
 
   onClose() {
     this.createFolder(this.foldername);
-  }
+  };
 
 
 
@@ -113,19 +129,14 @@ export class PicComponent implements OnInit {
   logError(err: any) {
     console.log( err);
     console.log('log error', err);
-    // if (String(err['_body']).indexOf('unique') > 0) {
-    //   this.toastr.error("Request not processed");
-    // }
-    // if (err['status'] == 403) {
-    //   console.log(err['_body']);
-    //   this._router.navigate(['']);
-    // }
+    
   }
   // Calls create folder service
   createFolder(form) {
-    console.log(form);
-    let foldername = form.value;
-    this.imageService.createFolder(foldername.folder).subscribe(
+    let foldername = String(Object.values(form.value));
+
+    console.log('FOLDERNAME', foldername);
+    this.imageService.createFolder(foldername).subscribe(
       data => this.onCreateFolder(data),
       err => this.logError(err),
       () => console.log('Added successful')
@@ -142,9 +153,9 @@ export class PicComponent implements OnInit {
   onCreateFolder(data:any) {
 
     this.fetchfolder()
-    this.toastMessage = "successfully created folder";
+    this.toastMessage = "Folder successfully created";
     this.toast.open();
-    // this.toasterService.pop('success', '', 'Folder successfully created');
+    
   }
 
   // Service  call to fetch images
@@ -153,46 +164,119 @@ export class PicComponent implements OnInit {
     this.imageService.getImages().subscribe(
       data => this.onComplete(data),
       err => this.logError(err),
-      () => console.log('Complete')
+      () => console.log('Completesd')
     );
   }
-  deletefolder() {
+
+  
+
+  onSelectfolder(folder: FolderField, f: number) {
+    console.log('folder', folder, f)
+    this.imagecount = Object.keys(folder).length;
+    if (this.imagecount > 0) {
+      this.noimages = false;
+    } else {
+      this.noimages= true;
+    }
+    this.position = f;
+  }
+
+
+  deletefolder(folder:any) {
+    console.log(folder, 'del')
+    this.imageService.deletefolder(folder.id).subscribe(
+      data => this.onDeleteFolder(),
+      err => this.logError(err),
+      () => console.log('Completes')
+      );
+    this.toastMessage = "Folder successfully deleted";
+    this.toast.open();
+
+  }
+  onDeleteFolder() {
+    this.fetchfolder()
 
   }
 
-  editfolder() {
-
+  selectFolder(index) {
+    // open modal
+    this.pos = index;
+    this.selectedFolder = this.folders[index];
+    if(this.selectedFolder) {
+      this.editmodal.open();
+    }
+   
   }
 
+  editfolder(name:string, folder: any,) {
+    console.log('hfdh', folder, 'fdghjd', name)
+    if (name) {
 
+    this.toastMessage = "Folder successfully updated";
+    this.toast.open();
+    this.imageService.updatefolder(name, folder.id).subscribe(
+      data => this.onFolder(data),
+      err => this.logError(err),
+      () => console.log('Completehjkl')
+    );
+    }
+    this.toastMessage = "No folder updated";
+    this.toast.open();
+  }
+  onEdit(image) {
+    console.log('edit one', image)
+    this.selectedImage = image
+    this.validEdit(image)
+
+  }
+  
   onComplete(data:any) {
-    console.log('here', data)
-    this.images = data
-    console.log(data)
-    this.selectedImage = data[this.index]
-    console.log('imj', this.selectedImage, (this.images).length)
-    if ((this.images).length === 0) {
-      this.noimages = true;
+     if ((data).length === 0) {
+       console.log('one')
+       this.noimages = true;
+       console.log('one',this.noimages)
+       this.selectedImage = data
 
     } else {
-      console.log('hapa')
+      this.images = data
+      this.selectedImage = data[this.index]
+      this.validEdit(this.selectedImage)
       this.fetchEditedImage()
       this.noimages = false;
-      this.selectedImage = this.images[this.index - 1];
-      }
+      // this.selectedImage = this.images[this.index - 1]
+
+      
+    }
+  }
+
+    validEdit (pic:any) {
+      if(!pic['edited_image'] || (String(pic['edited_image']).indexOf('null')) === 0) {
+        console.log('before')
+         this.not_editted = true;
+         this.edit_image = false;
+
+      } 
+      else {
+        console.log('after')
+         this.not_editted = false;
+         this.edit_image = true;
+      
+     } 
+
     }
 
     fetchfolder() {
       this.imageService.getFolders().subscribe(
       data => this.onFolder(data),
       err => this.logError(err),
-      () => console.log('Complete')
+      () => console.log('Completehju')
     );
   }
 
 
     onFolder(data: any) {
       this.folders = data
+      console.log('THE FOLDERS', data);
       if(data.length < 1) {
         this.no_folder = true;
       }
@@ -207,8 +291,20 @@ export class PicComponent implements OnInit {
       console.log(photo, s, 'onselect')
       this.selectedImage = photo;
       this.index = s;
-
     }
+
+    onFolderNameSelect(target) {
+      // debugger;
+      this.selectedFolderName = target.value.name;
+      let ok = target.value;
+      console.log(ok);
+    }
+
+    inFolder(cb:any) {
+      console.log('cb,' , cb)
+      this.isInFolder = true;
+    }
+
     applyeffect(effects: string) {
       this.imageService.imageEffects( this.selectedImage,  this.selectedImage.id, this.filter, effects).subscribe(
       data => this.fetchEditedImage(),
@@ -235,7 +331,7 @@ export class PicComponent implements OnInit {
 
         }
      effect(value, transform_type:string) {
-      console.log(value,  transform_type, 'scale')
+      
       this.imageService.imageTranformation(this.selectedImage, this.selectedImage.id, value, transform_type, this.effectRange).subscribe(
         data => this.fetchEditedImage(),
         err => this.logError(err),
@@ -247,49 +343,68 @@ export class PicComponent implements OnInit {
       this.imageService.getSingleImage(this.selectedImage.id).subscribe(
       data => this.onEdit(data),
       err => this.logError(err),
-      () => console.log('Complete')
+      () => console.log('Completefill')
     );
         }
 
-     onEdit(pic:any) {
-       console.log('kill', pic)
-       this.selectedImage = pic
-       this.modalToggle.close()
-       if (pic['edited_image'] === null  || (pic['edited_image'].indexOf('null') > -1)) {
-       
-         console.log('pics ')
-         this.not_editted = true;
-         
-       }
-       
-       else {
-         console.log('editting')
-         this.not_editted = false;
-         this.edit_image = true;
-
-       }
-       
-
-     }
+    
      handleUpload(data): void {
+       // select
+       console.log('UPLOAD', data);
      this.imageDropped = true;
      this.uploadFile = data;
       
     if (data && data.response) {
-
+      console.log('in handle upload', data)
       this.imageDropped = false;
       this.uploadProgress = 0;
       data = JSON.parse(data.response);
       this.uploadFile = data;
-      this.selectedImage = data;
-      console.log('Image Uploaded', this.selectedImage )
       this.onEdit(data)
-      // this.toasterService.pop('success', 'Success', 'Image successfully Uploaded');
-      this.fetchImages() 
+      this.toastMessage = "Image successfully  uploaded";
+      this.toast.open();
+      
      
      
     }
   }
+
+  deleteImage(id:number) {
+    console.log('mad', id)
+    this.imageService.deleteImages(id).subscribe(
+       data => this.onDelete(),
+      err => this.logError(err),
+      () => console.log('Image deleted')
+    );
+  }
+
+  onDelete() {
+    this.imageService.getImages().subscribe(
+      data => this.onDeleteComplete(data),
+      err => this.logError(err),
+      () => console.log('Completesd')
+    );
+  }
+
+  onDeleteComplete(data:any) {
+    this.images = data
+    var num = Object.keys(data).length;
+    if (num > 0) {
+      console.log(data, 'deleted', data[this.index])
+      this.noimages = false;
+      this.selectedImage = data[this.index]
+      this.validEdit(this.selectedImage)
+    }
+    else {
+      console.log(data, 'deletedd')
+      this.noimages = true;
+      this.selectedImage = data
+      this.validEdit(this.selectedImage)
+    }
+
+
+  }
+  
 
   logOut() {
     localStorage.removeItem('auth_token');
@@ -304,7 +419,7 @@ export class PicComponent implements OnInit {
   }
 
   showDetails(pic) {
-    console.log('mimi')
+    // console.log('mimi', pic)
   }
 
 }

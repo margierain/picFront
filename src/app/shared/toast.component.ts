@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
 	selector: 'toast',
 	template: `
-		<div class="toast" *ngIf="show">
+		<div class="toast" *ngIf="show" [hidden]="!show">
 		  <ng-content select="[toast-content]"></ng-content>
 		</div>
 	`,
@@ -12,9 +12,9 @@ import { Component } from '@angular/core';
 			position: fixed;
 			top: 5%;
 			left: 70%;
-			width: 200px;
+			width: 20%;
 			height: 50px;
-			background-color: blue;
+			background-color:#26a636;
 			z-index: 100;
 		}
 	`]
@@ -26,9 +26,9 @@ export class ToastComponent {
 
 	open() {
 		this.show = true;
-
 		setTimeout(() => {
 			this.show = false;
+			console.log('yeye', this.show)
 		}, 3000);
 	}
 }

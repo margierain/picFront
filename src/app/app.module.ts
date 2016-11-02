@@ -10,7 +10,7 @@ import { FbComponent } from './fb/fb.component';
 import { PicComponent } from './pic/pic.component';
 import { routing, appRouterProviders } from './app.route';
 import { ImageService } from './pic/pic.service';
-
+import { LoginGuard } from './login-guard.service';
 
 
 
@@ -29,7 +29,7 @@ import { ImageService } from './pic/pic.service';
     
 
   ],
-  providers: [Http, HTTP_PROVIDERS, ImageService],
+  providers: [Http, HTTP_PROVIDERS, ImageService, LoginGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

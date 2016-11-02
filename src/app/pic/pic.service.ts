@@ -25,7 +25,7 @@ export class ImageService {
         return this.http.get('http://localhost:8000/api/images/',
             {headers: headers, body: ''})
         .map(res => {
-            // console.log('DATA', res.json());
+            console.log('getImages', res.json());
             return res.json();
          })
         .catch(err => err)
@@ -48,7 +48,6 @@ export class ImageService {
 
     // Api call to upload image
     getSingleImage(pid: number): Observable<any> {
-      console.log(pid, 'gfgh')
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
@@ -87,20 +86,41 @@ export class ImageService {
       .catch(err => err)
 
   }
+
+  // Api call to update folder name
+  updatefolder(name: string, fid: number): Observable<any> {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
+    return this.http.put('http://localhost:8000/api/folders/' + fid + '/', JSON.stringify({ 'name': name}), {
+      headers: headers
+    })
+      .map(res => res.json());
+  }
+
+  deleteImages(Imageid: number): Observable<any> {
+    var headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
+    console.log('jfk');
+    return this.http.delete('http://localhost:8000/api/images/' + Imageid + '/', {
+      headers: headers, body: ''});
+  }
+
+ 
   // Api call to delete a folder
   deletefolder(bid: number): Observable<any> {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', 'JWT ' + localStorage.getItem('auth_token'));
+    headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
     return this.http.delete('http://localhost:8000/api/folders/' + bid + '/', {
-      headers: headers
-    });
+      headers: headers, body: ''});
   }
 
   imageEffects(pic:any, pid: number, apply: string, effect: string ):Observable<any>  {
     var photo = {}
     photo[apply] = effect
-    var data = {"effects":  JSON.stringify(photo) }
+    var data = {"effects":  JSON.stringify(photo)}
     console.log('me',data)
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');

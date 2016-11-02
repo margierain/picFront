@@ -4,7 +4,7 @@
 }
 body , .rows {
     height:100vh;
-    background: url(../img/background.jpg) no-repeat;
+    background: url(../assets/img/background.jpg) no-repeat;
     background-size: cover;
     width: 100%;
     min-width: 100%;
@@ -29,6 +29,12 @@ body , .rows {
   border: dotted 3px green;
   margin-left: 10%;
   width: 75%;
+  color:#000;
+}
+
+#createfolder {
+  min-width: 85%;
+
 }
 footer {
     clear: both;
@@ -36,6 +42,7 @@ footer {
      left:0px;
      bottom:0px;
      min-width: 100%;
+     text-align:center;
 }
 footer.page-footer {
   padding-top: 0px !important;
@@ -70,48 +77,72 @@ footer.page-footer {
 }
 
 
-/*.wrapper { 
-        margin-top: 5%;
-        background:#EFEFEF; 
-        box-shadow: 1px 1px 10px #999; 
-        text-align: center; 
-        position: relative;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        margin-bottom: 20px !important;
-        width: 80%;
-        height: 50%;
-        padding-top: 2px;
-        padding-bottom: 2px;
-        margin-left: -2%;
+  .wrapper { 
+          /*margin-top: 5%;
+          background:#EFEFEF; 
+          box-shadow: 1px 1px 10px #999; 
+          text-align: center; 
+          position: relative;
+          -webkit-border-radius: 5px;
+          -moz-border-radius: 5px;
+          border-radius: 5px;
+          margin-bottom: 20px !important;
+          width: 80%;
+          height: 50%;
+          padding-top: 2px;
+          padding-bottom: 2px;
+          margin-left: -2%;*/
+        }
+
+  .scrolls { 
+      white-space:nowrap;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      width: 500px;
+      background-color: #fff;
+      color: #000;
+      text-align: center;
+      padding: 14px;
+      overflow: auto;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      white-space: nowrap;
+      height: 100px
+  } 
+
+  .imageDiv img { 
+    min-width: 500px;
       }
 
-.scrolls { 
-    overflow-x: scroll;
-    overflow-y: hidden;
-    height: 80px;
-    white-space:nowrap;
-    width: 100%;
-} 
-
-.imageDiv img { 
-    box-shadow: 1px 1px 10px #999; 
-    margin: 2px;
-    max-height: 150%;
-    cursor: pointer;
-    display:inline-block;
-    *display:inline;
-    *zoom:1;
-    vertical-align:top;
-    }*/
-
 #img {
- display: inline;
+    display: inline;
+    min-width: 50px;
  
 
 }
+modal-body {
+  text-align: center;
 
+}
+#folderupdate {
+  width: 100%;
+  text-align: center;
+}
+modal {
+  width: 40% !important;
+  height: auto;
+  position:absolute;
+  top: 40%;
+  transform: translateY(-50%);
+   margin-left: 30%;
+
+}
+
+#footmodal , #footmodal > put {
+     margin-left: 30%;
+
+}
 #edit_button {
   width: 10%;
   background-color: #fff;
@@ -309,4 +340,10 @@ div.scrolls > img {
 
 div.scrolls a:hover {
     background-color: #777;
+}
+select {
+  display: block !important;
+}
+#check  {
+  margin-top: 2%;
 }

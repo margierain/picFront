@@ -1,6 +1,6 @@
 body , .container-fluid {
     height:100vh;
-    background: url(../img/dark.jpg) no-repeat;
+    background: url(../assets/img/dark.jpg) no-repeat;
     background-size: cover;
     width: 100%;
     min-width: 100%;

@@ -1,9 +1,8 @@
 <toast>
-  <div toast-content>
-    {{ toastMessage }}
-  </div>
+    <div toast-content>
+        {{ toastMessage }}
+    </div>
 </toast>
-
 <div class="row rows">
     <div class="col s12">
         <ul class="right hide-on-med-and-down">
@@ -41,7 +40,7 @@
                         <li>
                             <form>
                                 Edge Ehnance
-                                <input #ehnance type="checkbox" name="filter" value=edge_enhance>
+                                <input #enhance type="checkbox" name="filter" value=edge_enhance>
                                 <input (click)="effects=enhance.value; applyeffect(effects)" type="submit" value="Apply">
                             </form>
                         </li>
@@ -178,104 +177,68 @@
             <div *ngIf="not_editted">
                 <a download="custom-filename.jpg" href="{{selectedImage.image}}" title="Click to download image">
                     <img class="responsive-img" id="edit_img" src="{{selectedImage.image}}"></a>
-                <div class="scrolls">
-                    <div class="col s4" *ngFor="let pic of images let s=index ">
-                        <img class="responsive-img" id="img" src="{{pic.image}}" />
-                        <br>
-                        <input id="edit_button" type="submit" value=edit (click)="onEdit(pic)">
-                    </div>
-                </div>
             </div>
-             <div *ngIf="edit_image" on-mouseover="showDetails(selectedImage)">
-            <a download="custom-filename.jpg" href="{{selectedImage.image}}" title="Click to download image">
-                <img class="responsive-img" id="edit_img" src={{selectedImage.edited_image}}></a>
-            <div class="wrapper">
-                <div class="scrolls">
-                    <div class="col s4 " *ngFor="let pic of images let s=index ">
-                        <img class="responsive-img" id="img" src="{{pic.image}}" />
-                        <br>
-                        <input id="edit_button" type="submit" value=edit (click)="onEdit(pic)">
-                    </div>
-                </div>
+            <div *ngIf="edit_image" on-mouseover="showDetails(selectedImage)">
+                <a download="custom-filename.jpg" href="{{selectedImage.edited_image}}" title="Click to download image">
+                    <img class="responsive-img" id="edit_img" src={{selectedImage.edited_image}}></a>
             </div>
         </div>
-        </div>
-   
-    <div id="right-bar" class="col s2 push-s2">
-        <div id="folder">
-            <ul class="dropdown-menu scroll-menu" role="menu">
-                <h4>View folders</h4>
-                <ul>
-                    <li *ngFor="let folder of folders">
-                        <p>
-                            {{folder.name}}  {{folder.images.length}} <i [style.cursor]="'auto'" id="edit" (click)="toast.open()" class="material-icons">mode_edit</i>
-                            <span *ngIf="folder.images.length >= 1">
+        <div id="right-bar" class="col s2 push-s2">
+            <div id="folder">
+                <ul class="dropdown-menu scroll-menu" role="menu">
+                    <h4>View folders</h4>
+                    <ul>
+                        <li *ngFor="let pic of images let s=index ">
+                            <img class="responsive-img" id="img" src="{{pic.image}} " (click)="onEdit(pic)" />
+                            <input type="submit" value="Delete Image" (click)="deleteImage(pic.id)" />
+                            <p>Date created: {{pic.date_created | date}}</p>
+                            <p>Date modified: {{pic.date_modified | date}}</p>
+                        </li>
+                        <li *ngFor="let folder of folders; let i= index">
+                            <p>
+                                {{folder.name}} {{folder.images.length}} <i (click)="selectFolder(i)" [style.cursor]="'pointer'" id="edit" class="material-icons">mode_edit</i>
+                                <span *ngIf="folder.images.length >= 1">
                                     <input (click)="folderPhotoes(folder)" type="submit" (click)="modalToggle.open()" value="View images"> 
                                 </span>
-                        </p>
-                    </li>
-                    <li *ngIf="no_folder">You currents have no folders</li>
+                            </p>
+                        </li>
+                        <li *ngIf="no_folder">You currents have no folders</li>
+                    </ul>
                 </ul>
-            </ul>
-            <modal [animation]="animationsEnabled">
-                <modal-header [show-close]="true">
-                    <h4 class="modal-title">Update Bucket Name</h4>
-                </modal-header>
-                <modal-body>
-                    <div *ngFor=" let folder of folders" [class.selected]="folder===selectedfolder">
-                        <div #bname class="view">
-                            <div *ngIf="bucket === selectedBucket">
-                                <input type="text" autofocus [value]="folder.name" #editfolder (keyup.escape)="editModal.close()" (keyup.enter)="commitEditBucketList(editbucket.value,editbucket, bname, bucket)" class="form-control no-border input-lg" />
-                            </div>
-                        </div>
-                    </div>
-                </modal-body>
-                <modal-footer>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="modal.dismiss()">Cancel</button>
-                    <button type="button" class="btn btn-danger" (click)="modalconfirm.open(); editModal.close(); "><i class="large material-icons">delete</i></button>
-                    <button type="submit" class="btn btn-primary" (click)="foldername=editfolder.value; editModal.close();"><i class="material-icons">update</i></button>
-                </modal-footer>
-            </modal>
+                <modal [animation]="animationsEnabled" #editModal>
+                    <modal-header [show-close]="true">
+                        <h4 class="modal-title">Update Bucket Name</h4>
+                    </modal-header>
+                    <modal-body>
+                        <input #fname id="folderupdate" type="text" [placeholder]="selectedFolder?.name" class="form-control no-border input-lg" />
+                    </modal-body>
+                    <modal-footer id="footmodal">
+                        <input class="put" type="submit" (click)="editfolder(fname.value, selectedFolder); 
+                        editModal.close();" value=Update required>
+                        <input class="put" type="submit" (click)="editModal.dismiss()" value=Cancel>
+                        <input class="put" type="submit" (click)="deletefolder(selectedFolder);" value=Delete>
+                    </modal-footer>
+                </modal>
+            </div>
+            <div class="card-panel grey lighten-5 z-depth-1">
+            <form id="createfolder" #f="ngForm" (ngSubmit)="createFolder(f) ">
+                <input type="text " [(ngModel)]="foldername" name="folder " placeholder="Create folder">
+                <input type="submit" />
+            </form>
+            <p id="check">
+                <input type="checkbox" class="filled-in" id="filled-in-box" [checked]="isInFolder" (change)="isInFolder = $event.target.checked" [style.cursor]="'pointer'" />
+                <label for="filled-in-box">Upload image in folder</label>
+            </p>
+            <label for="options">Folder Name</label>
+            <select *ngIf="folders" (change)="onFolderNameSelect($event.target)" [disabled]="!isInFolder">
+                <option [value]="folder | json" *ngFor="let folder of folders;">{{folder.name}}</option>
+            </select>
+            <input class="file" type="file" ngFileSelect [options]="options" (onUpload)="handleUpload($event)" [disabled]="!selectedFolderName && isInFolder" [style.cursor]="'pointer'">
+            </div>
         </div>
-        <form #f="ngForm" (ngSubmit)="createFolder(f)">
-            <input type="text" [(ngModel)]="foldername" name="folder" placeholder="Create folder" required>
-            <input type="submit">
-        </form>
-        <input class="file" type="file" ngFileSelect [options]="options" (onUpload)="handleUpload($event)">
-        <div ngFileDrop [options]="options" (onUpload)="handleUpload($event)" [ngClass]="{'file-over': hasBaseDropZoneOver}" (onFileOver)="fileOverBase($event)">
-        </div>
-        <button (click)="otherToggle.open()" class="btn">Modal</button>
-        <div class="col s12">
-            <footer class="page-footer black" id="footer">
-                <h6 class="white-text ">Welcome to pimpic built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() ">logout</a></h6>
+        <div class="col s12 ">
+            <footer class="page-footer black " id="footer ">
+                <h6 class="white-text ">Welcome to pimpic built by <a href="https://plus.google.com/+MaggieRain/ " target="blank ">@margierain</a> | to logout click <a title="click to logout " (click)="logOut() "[style.cursor]="'pointer'">logout</a></h6>
             </footer>
         </div>
     </div>
-    <!--  Modal window -->
-    <div class="outer" *ngIf="open">
-        <div class="popup">
-            <div class="row dropdown-menu scroll-menu " role="menu">
-                <ul class="dropdown-menu scroll-menu ">
-                    <div class="col s4" *ngFor="let photo of folderimages let s = index">
-                        <img src="">
-                        <img class="responsive-img" id="img" src="{{pic.image}}" />
-                        <input type="submit" value=edit (click)="onEdit(pic)">
-                    </div>
-                </ul>
-            </div>
-        </div>
-        <div class="popup-bg" (click)="modalToggle.close()"></div>
-        <!--  Modal window -->
-        <div class="outer" *ngIf="opens">
-            <div class="popup">
-                <div class="row dropdown-menu scroll-menu " role="menu">
-                    <ul class="dropdown-menu scroll-menu ">
-                        <div class="col s4" *ngFor="let pic of images  let s = index">
-                            <img src="">
-                            <img class="responsive-img" id="img" src="{{pic.image}}" />
-                            <input type="submit" value=edit (click)="onEdit(pic)">
-                        </div>
-                    </ul>
-                </div>
-            </div>
-        </div>
