@@ -27,8 +27,7 @@ export class FbComponent implements OnInit {
     login() {
       let self = this;
     FB.login(function (response) {
-      console.log('fb')
-      console.log(response);
+      
       status = response['status'];
      var userId = response['authResponse'].userID;
      if (status == 'connected') {
@@ -43,6 +42,8 @@ export class FbComponent implements OnInit {
 
          let access_token = response['authResponse']['accessToken'];
           localStorage.setItem('fb_token', access_token);
+          self.router.navigate(['/home']);
+          
 
 
      }
@@ -54,19 +55,11 @@ export class FbComponent implements OnInit {
      }
     }, {scope: 'public_profile', return_scopes: true});
 }
-   // store auth token on the browser
-  onComplete(data:any) {
-    console.log('on complete')
-    localStorage.setItem('fb_token', data["token"]);
-    this.router.navigate(['/home']);
-  }
+  
       // Execuit after failed authentication
     logError(err: any) {
-      console.log('logerror')
-      console.log(err)
-    // this.correct = false;
-    // this.userobj = JSON.parse(err["_body"]);
-    // this.arrayOfKeys = Object.keys(this.userobj);
+      console.log('logerror', err)
+    
   }
 
 

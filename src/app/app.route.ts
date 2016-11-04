@@ -8,7 +8,7 @@ import { LoginGuard } from './login-guard.service';
 const routes: Routes = [
   {path: 'home', component: PicComponent, canActivate: [LoginGuard] },
    {path: '', component: FbComponent },
-  {path: 'app', component: AppComponent }
+  
 ];
 
 export const appRouterProviders: any[] = [

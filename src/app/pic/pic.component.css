@@ -9,6 +9,7 @@ body , .rows {
     width: 100%;
     min-width: 100%;
     position: fixed;
+
 }
 
 .chip {
@@ -32,8 +33,17 @@ body , .rows {
   color:#000;
 }
 
-#createfolder {
-  min-width: 85%;
+#createfolder{
+  display: flex;
+  flex-direction: column;
+ }
+#createfolder > input:nth-child(1) {
+  width: 100%;
+
+}
+#createfolder > input:nth-child(2) {
+  align-self: center;
+  width: 40%;
 
 }
 footer {
@@ -64,7 +74,7 @@ footer.page-footer {
   height: 60vh;
   margin-top: 2%;
   position: relative;
-  margin-left: -28%;
+  margin-left: -31%;
 }
 
 #noimage {
@@ -77,23 +87,7 @@ footer.page-footer {
 }
 
 
-  .wrapper { 
-          /*margin-top: 5%;
-          background:#EFEFEF; 
-          box-shadow: 1px 1px 10px #999; 
-          text-align: center; 
-          position: relative;
-          -webkit-border-radius: 5px;
-          -moz-border-radius: 5px;
-          border-radius: 5px;
-          margin-bottom: 20px !important;
-          width: 80%;
-          height: 50%;
-          padding-top: 2px;
-          padding-bottom: 2px;
-          margin-left: -2%;*/
-        }
-
+  
   .scrolls { 
       white-space:nowrap;
       width: 100%;
@@ -345,5 +339,22 @@ select {
   display: block !important;
 }
 #check  {
-  margin-top: 2%;
+  margin-top: 12%;
+}
+
+div > button {
+  cursor: none;
+}
+modal-body > img {
+  height: 40%;
+  width: 40%;
+}
+
+#delete {
+  float: right;
+  background-color: red;
+}
+.imageProperties {
+  font-size: 10px;
+  line-height: normal;
 }

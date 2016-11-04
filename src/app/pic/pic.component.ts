@@ -2,16 +2,16 @@ import { Component, OnInit, Input, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
 import { ImageService } from './pic.service';
 import { ImageFields } from './photo';
-import { FolderField } from './file.ts';
+import { FolderField } from './file';
+import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 
 import { UPLOAD_DIRECTIVES } from 'ng2-uploader/ng2-uploader';
 import { Ng2Bs3ModalModule, ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { ToastComponent } from '../shared/toast.component';
 
-const URL = 'http://localhost:8000/api/images/';
-// const FOLDER_URL = 'http://localhost:8000/api/folders/' + this.selectedFolderName.id + '/images/';
-// console.log('url', FOLDER_URL)
+const URL = 'https://picfront.herokuapp.com/api/images/';
+//'https://picfront.herokuapp.com/'
 
 var fb_token = localStorage.getItem('fb_token');
 
@@ -24,11 +24,11 @@ var fb_token = localStorage.getItem('fb_token');
 })
 
 export class PicComponent implements OnInit {
-   selectedFolderName: any;
+   noimages = false;
+   targetFolder: any;
    isInFolder:boolean = false;
    imageUrl:string;
    foldername: string;
-   noimages = false;
    index: number = 0;
    effects: string;
    filter = "filter";
@@ -51,23 +51,21 @@ export class PicComponent implements OnInit {
   server_url = "";
   not_editted:boolean = false;
 
-  FOLDER_URL: any = 'http://localhost:8000/api/folders/' + this.selectedFolderName + '/images/';
+  FOLDER_URL: any;
 
 
   @ViewChild(ToastComponent) toast: ToastComponent;
   toastMessage: string = '';
 
-   @Input() options: Object = {
+  options: Object = {
     url: URL,
     allowedExtensions: ['image/png', 'image/jpg', 'image/jpeg'],
     authToken: localStorage.getItem('fb_token'),
     authTokenPrefix: "Bearer facebook ",
-    fieldName: 'image'
-    // data: {
-    //    "name": this.selectedFolderName
-    //  },
-
-
+    fieldName: 'image',
+    data: {
+       "name": ''
+     }
  };
 
 
@@ -83,23 +81,16 @@ export class PicComponent implements OnInit {
    @Input() imagecount: number;
    @Input() folder: FolderField;
 
-   // @Input() public selectdeletefolder: Folder;
-   // @Input() public selectdeleteImage: images;
 
-  constructor(private imageService:ImageService, private _router: Router ) { }
+  constructor(private imageService:ImageService, private _router: Router, private slimLoadingBarService: SlimLoadingBarService) { }
 
-  modalToggle = {
-    open: () => this.open = true,
-    close: () => this.open = false
-  }
-
-  otherToggle = {
-    opens: () => this.opens = true,
-    close: () => this.opens = false
-  }
+  
 
   @ViewChild('editModal')
   editmodal: ModalComponent;
+
+  @ViewChild('viewImage')
+  viewimage: ModalComponent;
 
   onClose() {
     this.createFolder(this.foldername);
@@ -116,8 +107,11 @@ export class PicComponent implements OnInit {
      if (profPic) {
        this.avatar = profPic;
        this.username = profName;
-       this.fetchImages()
+       this.noimages = true;
        this.fetchfolder()
+       this.fetchImages()
+       
+
      }
      else {
        console.log('not found')
@@ -127,15 +121,38 @@ export class PicComponent implements OnInit {
 
   // Executed when an error occurs on Api call
   logError(err: any) {
-    console.log( err);
     console.log('log error', err);
     
   }
-  // Calls create folder service
-  createFolder(form) {
-    let foldername = String(Object.values(form.value));
 
-    console.log('FOLDERNAME', foldername);
+  startLoading() {
+        this.slimLoadingBarService.start(() => {
+            
+        });
+    }
+
+
+    stopLoading() {
+        this.slimLoadingBarService.stop();
+        
+    }
+
+    completeLoading() {
+        this.slimLoadingBarService.complete();
+    }
+
+
+    fetchfolder() {
+      this.imageService.getFolders().subscribe(
+      data => this.onFolder(data),
+      err => this.logError(err),
+      () => console.log('Fetch folder')
+    );
+  }
+
+  // Calls create folder service
+  createFolder(form: any) {
+    let foldername = this.foldername.trim();
     this.imageService.createFolder(foldername).subscribe(
       data => this.onCreateFolder(data),
       err => this.logError(err),
@@ -144,11 +161,7 @@ export class PicComponent implements OnInit {
 
     this.foldername = '';
   }
-  // Retrieve photoes in a folder
-  folderPhotoes(folder:any) {
-    console.log('new', folder)
-
-  }
+ 
 
   onCreateFolder(data:any) {
 
@@ -160,18 +173,16 @@ export class PicComponent implements OnInit {
 
   // Service  call to fetch images
   fetchImages() {
-    console.log("start fetch");
     this.imageService.getImages().subscribe(
       data => this.onComplete(data),
       err => this.logError(err),
-      () => console.log('Completesd')
+      () => console.log('fetch image')
     );
   }
 
   
 
   onSelectfolder(folder: FolderField, f: number) {
-    console.log('folder', folder, f)
     this.imagecount = Object.keys(folder).length;
     if (this.imagecount > 0) {
       this.noimages = false;
@@ -183,11 +194,10 @@ export class PicComponent implements OnInit {
 
 
   deletefolder(folder:any) {
-    console.log(folder, 'del')
     this.imageService.deletefolder(folder.id).subscribe(
       data => this.onDeleteFolder(),
       err => this.logError(err),
-      () => console.log('Completes')
+      () => console.log('Delete folders')
       );
     this.toastMessage = "Folder successfully deleted";
     this.toast.open();
@@ -209,7 +219,6 @@ export class PicComponent implements OnInit {
   }
 
   editfolder(name:string, folder: any,) {
-    console.log('hfdh', folder, 'fdghjd', name)
     if (name) {
 
     this.toastMessage = "Folder successfully updated";
@@ -217,14 +226,13 @@ export class PicComponent implements OnInit {
     this.imageService.updatefolder(name, folder.id).subscribe(
       data => this.onFolder(data),
       err => this.logError(err),
-      () => console.log('Completehjkl')
+      () => console.log('Edit folder')
     );
     }
     this.toastMessage = "No folder updated";
     this.toast.open();
   }
   onEdit(image) {
-    console.log('edit one', image)
     this.selectedImage = image
     this.validEdit(image)
 
@@ -232,9 +240,7 @@ export class PicComponent implements OnInit {
   
   onComplete(data:any) {
      if ((data).length === 0) {
-       console.log('one')
        this.noimages = true;
-       console.log('one',this.noimages)
        this.selectedImage = data
 
     } else {
@@ -243,21 +249,20 @@ export class PicComponent implements OnInit {
       this.validEdit(this.selectedImage)
       this.fetchEditedImage()
       this.noimages = false;
-      // this.selectedImage = this.images[this.index - 1]
+     
 
       
     }
   }
 
     validEdit (pic:any) {
+      
       if(!pic['edited_image'] || (String(pic['edited_image']).indexOf('null')) === 0) {
-        console.log('before')
          this.not_editted = true;
          this.edit_image = false;
 
       } 
       else {
-        console.log('after')
          this.not_editted = false;
          this.edit_image = true;
       
@@ -265,18 +270,9 @@ export class PicComponent implements OnInit {
 
     }
 
-    fetchfolder() {
-      this.imageService.getFolders().subscribe(
-      data => this.onFolder(data),
-      err => this.logError(err),
-      () => console.log('Completehju')
-    );
-  }
-
 
     onFolder(data: any) {
       this.folders = data
-      console.log('THE FOLDERS', data);
       if(data.length < 1) {
         this.no_folder = true;
       }
@@ -288,28 +284,30 @@ export class PicComponent implements OnInit {
     }
 
     onselect(photo: ImageFields, s: number) {
-      console.log(photo, s, 'onselect')
       this.selectedImage = photo;
       this.index = s;
     }
 
     onFolderNameSelect(target) {
-      // debugger;
-      this.selectedFolderName = target.value.name;
-      let ok = target.value;
-      console.log(ok);
-    }
+      if(this.isInFolder) {
+        this.targetFolder = JSON.parse(target.value);
+        this.FOLDER_URL = `https://picfront.herokuapp.com/api/folders/${this.targetFolder.id}/images/`;
+        this.options['url'] = this.FOLDER_URL;
+        this.options['data'].name = this.targetFolder.name;
+        this.options['data'].id = this.targetFolder.id;
 
-    inFolder(cb:any) {
-      console.log('cb,' , cb)
-      this.isInFolder = true;
+      } else {
+        this.options['url'] = URL;
+        this.isInFolder = false;
+      }
+      
     }
 
     applyeffect(effects: string) {
       this.imageService.imageEffects( this.selectedImage,  this.selectedImage.id, this.filter, effects).subscribe(
       data => this.fetchEditedImage(),
       err => this.logError(err),
-      () => console.log('apply effects')
+      () => this.completeLoading()
     );
 
     }
@@ -317,7 +315,7 @@ export class PicComponent implements OnInit {
       this.imageService.imageEffects(this.selectedImage, this.selectedImage.id, this.transform, effects).subscribe(
       data => this.fetchEditedImage(),
       err => this.logError(err),
-      () => console.log('apply transform')
+      () => this.completeLoading()
     );
 
     }
@@ -326,16 +324,16 @@ export class PicComponent implements OnInit {
       this.imageService.imageTranformation(this.selectedImage, this.selectedImage.id, value, transform_type, this.enhance).subscribe(
         data => this.fetchEditedImage(),
         err => this.logError(err),
-        () => console.log('apply enhance')
+        () => this.completeLoading()
           );
 
         }
      effect(value, transform_type:string) {
-      
+      console.log('loading')
       this.imageService.imageTranformation(this.selectedImage, this.selectedImage.id, value, transform_type, this.effectRange).subscribe(
         data => this.fetchEditedImage(),
         err => this.logError(err),
-        () => console.log('apply enhance')
+        () => this.completeLoading()
           );
 
         }
@@ -343,34 +341,30 @@ export class PicComponent implements OnInit {
       this.imageService.getSingleImage(this.selectedImage.id).subscribe(
       data => this.onEdit(data),
       err => this.logError(err),
-      () => console.log('Completefill')
+      () => console.log('Complete')
     );
         }
 
     
      handleUpload(data): void {
        // select
-       console.log('UPLOAD', data);
+      console.log('2. UPLOAD', data);
      this.imageDropped = true;
      this.uploadFile = data;
       
     if (data && data.response) {
-      console.log('in handle upload', data)
       this.imageDropped = false;
       this.uploadProgress = 0;
       data = JSON.parse(data.response);
       this.uploadFile = data;
       this.onEdit(data)
       this.toastMessage = "Image successfully  uploaded";
-      this.toast.open();
-      
-     
-     
+      this.toast.open(); 
+      this.completeLoading()   
     }
   }
 
   deleteImage(id:number) {
-    console.log('mad', id)
     this.imageService.deleteImages(id).subscribe(
        data => this.onDelete(),
       err => this.logError(err),
@@ -407,19 +401,24 @@ export class PicComponent implements OnInit {
   
 
   logOut() {
-    localStorage.removeItem('auth_token');
+    localStorage.removeItem('fb_token');
     this._router.navigate(['/']);
   }
   shareImage() {
+    console.log('sharelog',this.selectedImage)
     FB.ui({
       method: 'share',
-      href: this.selectedImage.image,
-      picture: this.selectedImage.image
+      href: this.selectedImage.edited_image,
+      picture: this.selectedImage.edited_image
     }, function (response) { });
   }
 
   showDetails(pic) {
     // console.log('mimi', pic)
+  }
+  folderPhotoes(folderimages) {
+    console.log(folderimages, 'bmcv')
+
   }
 
 }

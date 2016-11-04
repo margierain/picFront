@@ -8,6 +8,9 @@ import 'rxjs/add/operator/catch';
 import { ImageFields } from './photo';
 import { FolderField } from './file';
 
+const backend_url = 'http://localhost:8000/'
+//'https://picfront.herokuapp.com/'
+//http://localhost:8000/
 
 @Injectable()
 export class ImageService {
@@ -22,7 +25,7 @@ export class ImageService {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-        return this.http.get('http://localhost:8000/api/images/',
+        return this.http.get(backend_url + 'api/images/',
             {headers: headers, body: ''})
         .map(res => {
             console.log('getImages', res.json());
@@ -36,7 +39,7 @@ export class ImageService {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-        return this.http.get('http://localhost:8000/api/folders/' +  fid + '/images/' + pid + '/',
+        return this.http.get(backend_url + 'api/folders/' +  fid + '/images/' + pid + '/',
             {headers: headers, body: ''})
         .map(res => {
             console.log('folder', res.json());
@@ -51,7 +54,22 @@ export class ImageService {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-        return this.http.get('http://localhost:8000/api/images/' +  pid + '/',
+        return this.http.get(backend_url + 'api/images/' +  pid + '/',
+            {headers: headers, body: ''})
+        .map(res => {
+            console.log('Single', res.json());
+            var singleImage = res.json();
+            singleImage.edited_image += '?' + Math.random();
+            return singleImage;
+         })
+        .catch(err => err)
+
+    }
+    resetImage(pid: number) {
+      var headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
+        return this.http.get(backend_url + 'api/images/' +  pid + '/',
             {headers: headers, body: ''})
         .map(res => {
             console.log('Single', res.json());
@@ -69,7 +87,7 @@ export class ImageService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    return this.http.post('http://localhost:8000/api/folders/', JSON.stringify({ "name": folder }), {
+    return this.http.post(backend_url + 'api/folders/', JSON.stringify({ "name": folder }), {
 
       headers: headers
     })
@@ -81,7 +99,7 @@ export class ImageService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    return this.http.get('http://localhost:8000/api/folders/', {headers: headers, body: ''})
+    return this.http.get(backend_url + 'api/folders/', {headers: headers, body: ''})
       .map(res => res.json())
       .catch(err => err)
 
@@ -92,7 +110,7 @@ export class ImageService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    return this.http.put('http://localhost:8000/api/folders/' + fid + '/', JSON.stringify({ 'name': name}), {
+    return this.http.put(backend_url + 'api/folders/' + fid + '/', JSON.stringify({ 'name': name}), {
       headers: headers
     })
       .map(res => res.json());
@@ -103,7 +121,7 @@ export class ImageService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
     console.log('jfk');
-    return this.http.delete('http://localhost:8000/api/images/' + Imageid + '/', {
+    return this.http.delete(backend_url + 'api/images/' + Imageid + '/', {
       headers: headers, body: ''});
   }
 
@@ -113,7 +131,7 @@ export class ImageService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    return this.http.delete('http://localhost:8000/api/folders/' + bid + '/', {
+    return this.http.delete(backend_url + 'api/folders/' + bid + '/', {
       headers: headers, body: ''});
   }
 
@@ -126,7 +144,7 @@ export class ImageService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
     return this.http.put(
-      'http://localhost:8000/api/images/' + pid + '/', data, {headers: headers }
+      backend_url + 'api/images/' + pid + '/', data, {headers: headers }
     ).map(res => {
             console.log('Image', res.json());
             return res.json();
@@ -141,9 +159,8 @@ export class ImageService {
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-    console.log('datas', data )
     return this.http.put(
-      'http://localhost:8000/api/images/' + pid + '/', data, {headers: headers }
+      backend_url + 'api/images/' + pid + '/', data, {headers: headers }
     ).map(res => {
             console.log('Image', res.json());
             return res.json();

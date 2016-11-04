@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { UPLOAD_DIRECTIVES } from 'ng2-uploader/ng2-uploader';
@@ -24,11 +25,13 @@ import { LoginGuard } from './login-guard.service';
     FormsModule,
     HttpModule,
     routing,
-    Ng2Bs3ModalModule ,
+    Ng2Bs3ModalModule,
+    SlimLoadingBarModule.forRoot(),
     
     
 
   ],
+  exports: [BrowserModule, SlimLoadingBarModule],
   providers: [Http, HTTP_PROVIDERS, ImageService, LoginGuard],
   bootstrap: [AppComponent]
 })
