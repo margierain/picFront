@@ -10,7 +10,7 @@ import { Ng2Bs3ModalModule, ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 import { ToastComponent } from '../shared/toast.component';
 
-const URL = 'https://picfront.herokuapp.com/api/images/';
+const URL = 'http://localhost:8000/api/images/';
 //'https://picfront.herokuapp.com/'
 
 var fb_token = localStorage.getItem('fb_token');
@@ -291,7 +291,7 @@ export class PicComponent implements OnInit {
     onFolderNameSelect(target) {
       if(this.isInFolder) {
         this.targetFolder = JSON.parse(target.value);
-        this.FOLDER_URL = `https://picfront.herokuapp.com/api/folders/${this.targetFolder.id}/images/`;
+        this.FOLDER_URL = `http://localhost:8000/api/folders/${this.targetFolder.id}/images/`;
         this.options['url'] = this.FOLDER_URL;
         this.options['data'].name = this.targetFolder.name;
         this.options['data'].id = this.targetFolder.id;
@@ -420,5 +420,18 @@ export class PicComponent implements OnInit {
     console.log(folderimages, 'bmcv')
 
   }
+
+  resetImage(pid:any) {
+    this.imageService.resetImage(pid).subscribe(
+      data => this.onReset(),
+      err => this.logError(err),
+      () => console.log('Completesd')
+    );
+  }
+
+  onReset() {
+    console.log('reset')
+    this.fetchImages()
+  } 
 
 }

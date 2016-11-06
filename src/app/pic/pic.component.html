@@ -174,7 +174,7 @@
                     <div ngFileDrop [options]="options" (onUpload)="handleUpload($event)" [ngClass]="{'file-over': hasBaseDropZoneOver}" (onFileOver)="fileOverBase($event)">
                     </div>
                 </div>
-                <input type="submit" name="Reset">
+                
             </div>
             <div *ngIf="not_editted">
                 <img class="responsive-img" id="edit_img" src="{{selectedImage.image}}">
@@ -183,7 +183,9 @@
             <div *ngIf="edit_image">
                 <a download="custom-filename.jpg" href="{{selectedImage.edited_image}}" title="Click to download image">
                     <img class="responsive-img" id="edit_img" src={{selectedImage.edited_image}}></a>
+                    <input type="submit" name="Reset" (click)="resetImage(selectedImage.id)">
             </div>
+            
         </div>
         <div id="right-bar" class="col s2 push-s2">
             <div id="folder">

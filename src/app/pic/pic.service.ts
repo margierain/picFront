@@ -66,16 +66,15 @@ export class ImageService {
 
     }
     resetImage(pid: number) {
+      console.log(pid, 'huj')
       var headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('Authorization', 'Bearer facebook ' + localStorage.getItem('fb_token'));
-        return this.http.get(backend_url + 'api/images/' +  pid + '/',
-            {headers: headers, body: ''})
+        return this.http.put(backend_url + 'api/images/' +  pid + '/', JSON.stringify({ "edited_image": '/' }),
+            {headers: headers})
         .map(res => {
-            console.log('Single', res.json());
-            var singleImage = res.json();
-            singleImage.edited_image += '?' + Math.random();
-            return singleImage;
+            return res.json()
+            
          })
         .catch(err => err)
 
